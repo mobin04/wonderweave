@@ -109,6 +109,17 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+// IMPLEMENT A SIMPLE LOG OUT MIDDLEWARE.
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({
+    status: 'success',
+  });
+};
+
 // 3) PROTECTING THE ROUTES MIDDLEWARE FUNCTION.
 exports.protect = catchAsync(async (req, res, next) => {
   //STEPS TO IMPLEMENT THE PROTECTED ROUTE :)
@@ -156,31 +167,36 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 // Only for Rendered Pages, no errors!
-exports.isUserLoggedIn = catchAsync(async (req, res, next) => {
+exports.isUserLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
-    // 1) Verify the token
-    const decode = await promisify(jwt.verify)(
-      req.cookies.jwt,
-      process.env.JWT_SECRET,
-    );
+    try {
+      // 1) Verify the token
+      const decode = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET,
+      );
 
-    // 2) Check if user still exists,
-    const currentUser = await User.findById(decode.id);
-    if (!currentUser) {
+      // 2) Check if user still exists,
+      const currentUser = await User.findById(decode.id);
+      if (!currentUser) {
+        return next();
+      }
+
+      // 3) Check if user changed password after the token was issued,
+      if (currentUser.changedPasswordAfter(decode.iat)) {
+        return next();
+      }
+
+      // THERE IS A LOGGED IN USER
+      res.locals.user = currentUser;
+      return next();
+    } catch (err) {
       return next();
     }
-
-    // 3) Check if user changed password after the token was issued,
-    if (currentUser.changedPasswordAfter(decode.iat)) {
-      return next();
-    }
-
-    // THERE IS A LOGGED IN USER
-    res.locals.user = currentUser;
-    return next();
   }
+
   next(); // if there is no cookie there is no logged in user
-});
+};
 
 // 4) IMPLEMENTING (RESTRICTION) AUTHORIZATION
 //(...roles) => it using rest paramenter
@@ -291,5 +307,3 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 4) Log user in, send JWT
   createSendToken(user, 200, res);
 });
-
-

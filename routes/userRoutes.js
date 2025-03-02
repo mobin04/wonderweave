@@ -6,8 +6,10 @@ const router = express.Router();
 // not follow the REST
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
+router.get('/logout', authController.logout);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
+
 
 //protect all route after this middleware
 router.use(authController.protect);

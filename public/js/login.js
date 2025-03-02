@@ -34,3 +34,18 @@ export const login = async (email, password) => {
     loginBtn.disabled = false;
   }
 };
+
+export const logout = async () => {
+  try {
+    const res = await axios({
+      method: 'GET',
+      url: 'http://127.0.0.1:8000/api/v1/users/logout',
+    });
+    // set up reload the page, which will send the invalid cookie to the server
+    if (res.data.status === 'success') location.reload(true); // it will force reload the server not from browser cache.
+  } catch (err) {
+    alert('something went wrong ');
+    // console.log(err);
+    // showAlert('error', err.response.data.message);
+  }
+};
