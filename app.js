@@ -28,15 +28,38 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set security-related HTTP headers
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
-      connectSrc: ["'self'", "ws://127.0.0.1:*"], // Allow WebSocket connections
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "'unsafe-eval'",
+          'blob:',
+          'https://api.mapbox.com',
+          'https://cdnjs.cloudflare.com',
+        ],
+        connectSrc: [
+          "'self'",
+          'https://api.mapbox.com',
+          'https://events.mapbox.com',
+          'ws://127.0.0.1:*', // ✅ Allow WebSockets for Parcel HMR
+          'ws://localhost:*', // ✅ Allow WebSockets for local dev
+        ],
+        imgSrc: ["'self'", 'data:', 'https://*.mapbox.com'],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          'https://api.mapbox.com',
+          'https://fonts.googleapis.com',
+        ],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      },
     },
-  },
-}));
+  }),
+);
 
 // Enable request logging only in development mode
 if (process.env.NODE_ENV === 'development') {
