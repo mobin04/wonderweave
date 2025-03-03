@@ -1,6 +1,7 @@
 const Tour = require('../models/tourModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const User = require('../models/userModel');
 
 exports.getOverview = catchAsync(async (req, res) => {
   // 1) Get tour data from collection
@@ -47,4 +48,24 @@ exports.getAccount = (req, res) => {
   res.status(200).render('account', {
     title: 'Your account',
   });
-}
+};
+
+exports.updateUserData = async (req, res, next) => {
+  // req.data is come from URL-ENCODED from account.pug
+  console.log('UPDATING USER', req.body);
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      name: req.body.name, // the name and email come from the template that assign name.
+      email: req.body.email,
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+  res.status(200).render('account', {
+    title: 'Your account',
+    user: updatedUser,
+  });
+};

@@ -5,8 +5,8 @@ import { login, logout } from './login';
 
 // DOM ELEMENTs
 const mapBox = document.getElementById('map');
-const loginForm = document.querySelector('.form');
-const logOutBtn = document.querySelector('.nav__el--logout')
+const loginForm = document.querySelector('.form--login');
+const logOutBtn = document.querySelector('.nav__el--logout');
 
 // MAP BOX
 if (mapBox) {
@@ -24,4 +24,4 @@ if (loginForm) {
   });
 }
 
-if(logOutBtn) logOutBtn.addEventListener('click', logout)
+if (logOutBtn) logOutBtn.addEventListener('click', logout);
