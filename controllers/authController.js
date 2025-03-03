@@ -166,36 +166,38 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-// Only for Rendered Pages, no errors!
+// CHECKS WHETHER A USER IS LOGGED IN BASED ON A JSON WEB TOKEN (JWT) STORED IN COOKIES.
 exports.isUserLoggedIn = async (req, res, next) => {
+  // Check if there is a JWT cookie present in the request
   if (req.cookies.jwt) {
     try {
-      // 1) Verify the token
+      // 1) Verify the token using the JWT secret key
       const decode = await promisify(jwt.verify)(
         req.cookies.jwt,
         process.env.JWT_SECRET,
       );
 
-      // 2) Check if user still exists,
+      // 2) Check if the user still exists in the database
       const currentUser = await User.findById(decode.id);
       if (!currentUser) {
-        return next();
+        return next(); // If user does not exist, move to the next middleware
       }
 
-      // 3) Check if user changed password after the token was issued,
+      // 3) Check if the user changed their password after the token was issued
       if (currentUser.changedPasswordAfter(decode.iat)) {
-        return next();
+        return next(); // If password was changed, move to the next middleware (logout user)
       }
 
-      // THERE IS A LOGGED IN USER
+      // 4) If all checks pass, store the user in res.locals
+      // This makes the user data accessible in views (e.g., templates)
       res.locals.user = currentUser;
-      return next();
+
+      return next(); // Move to the next middleware
     } catch (err) {
-      return next();
+      return next(); // If an error occurs (e.g., token verification fails), move to the next middleware
     }
   }
-
-  next(); // if there is no cookie there is no logged in user
+  next(); // If no JWT cookie is present, move to the next middleware
 };
 
 // 4) IMPLEMENTING (RESTRICTION) AUTHORIZATION
