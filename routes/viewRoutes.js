@@ -18,7 +18,7 @@ router.get(
 );
 router.get('/me', authController.protect, viewsController.getAccount);
 
-// router.post(
+// router.post( // This for URL-Encoded route
 //   '/submit-user-data',
 //   authController.protect,
 //   viewsController.updateUserData,
