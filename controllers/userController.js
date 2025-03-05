@@ -1,22 +1,26 @@
 const multer = require('multer'); // for file uploading functionality.
+const sharp = require('sharp');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 
 // Configure Multer Storage
-const multerStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/img/users'); // Save files in "public/img/users" folder
-  },
-  filename: (req, file, cb) => {
-    // user-12345asdf-333322221111.jpeg
-    const ext = file.mimetype.split('/')[1];
-    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
-  },
-});
+// const multerStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/img/users'); // Save files in "public/img/users" folder
+//   },
+//   filename: (req, file, cb) => {
+//     // user-12345asdf-333322221111.jpeg
+//     const ext = file.mimetype.split('/')[1];
+//     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+//   },
+// });
 
-// Test the uploaded file is an image
+//Upload is now happen in buffer not directly to the filesystem.
+const multerStorage = multer.memoryStorage(); // Storage changed to memoryStorage
+
+// Test the uploaded file is an image (Only upload images)
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image')) {
     cb(null, true);
@@ -31,7 +35,27 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
+// Exporting the fully configured middleware.
 exports.uploadUserPhoto = upload.single('photo');
+
+//IMPLEMENTING THE IMAGE RESIZING MIDDLEWARE.
+// it work after the photo was uploaded.
+exports.resizeUserPhoto = (req, res, next) => {
+  // if there is no image Just return next().
+  if (!req.file) return next();
+
+  //Put image filename on req.file.filename(So we can use it in update me route handler)
+  req.file.filename = `user-${req.user.id}-${Date.now()}`;
+
+  // req.file.buffer is avaliable after image stored to memoryStorage.
+  sharp(req.file.buffer) // Sharp is an image resize tool
+    .resize(500, 500) //it resize the image to square 500 width and 500 height.
+    .toFormat('jpeg') // Format the image to jpeg.
+    .jpeg({ quality: 90 }) // Qualilty set to 90%.
+    .toFile(`public/img/users/${req.file.filename}`); //path to the file | file Name
+
+  next();
+};
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {}; // Create an empty object to store filtered properties
@@ -68,10 +92,10 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   }
   // 2) Filtered out unwanted fields names that are not allowed to be updated.
   const filteredBody = filterObj(req.body, 'name', 'email');
-  
+
   // if user update photo then assign a photo property to filteredBody
   if (req.file) filteredBody.photo = req.file.filename;
-  
+
   // 3) Update user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
