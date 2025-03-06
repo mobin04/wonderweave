@@ -11,6 +11,7 @@ const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-settings');
 
+
 // MAP BOX
 if (mapBox) {
   const locations = JSON.parse(mapBox.dataset.locations);
@@ -34,10 +35,12 @@ if (userDataForm) {
   userDataForm.addEventListener('submit', (e) => {
     e.preventDefault(); // prevents the browser from reloading the page or submit the form
     // Same names as api expect
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-
-    updateSettings({ name, email }, 'data');
+    const form = new FormData(); // Collect form details automatically.
+    form.append('name', document.getElementById('name').value); //.append() add key-value pairs to form
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]); //files are array and select the first file
+    console.log(form);
+    updateSettings(form, 'data');
   });
 }
 
@@ -45,11 +48,12 @@ if (userDataForm) {
 if (userPasswordForm) {
   userPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+       
     // Same names as api expect
     document.querySelector('.btn-save-password').innerHTML = 'Updating...';
-    let passwordCurrent = document.getElementById('password-current').value;
-    let password = document.getElementById('password').value;
-    let passwordConfirm = document.getElementById('password-confirm').value;
+    const passwordCurrent = document.getElementById('password-current').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
 
     await updateSettings(
       { passwordCurrent, password, passwordConfirm },
@@ -61,4 +65,3 @@ if (userPasswordForm) {
     document.getElementById('password-confirm').value = '';
   });
 }
- 

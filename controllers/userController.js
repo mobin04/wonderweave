@@ -1,7 +1,9 @@
 const multer = require('multer'); // for file uploading functionality.
-const sharp = require('sharp');
-const User = require('../models/userModel');
-const AppError = require('../utils/appError');
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+const sharp = require('sharp'); // for image resizing
+const User = require('../models/userModel'); // User model
+const AppError = require('../utils/appError'); //
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 

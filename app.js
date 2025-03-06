@@ -48,7 +48,7 @@ app.use(
           'ws://127.0.0.1:*', // ✅ Allow WebSockets for Parcel HMR
           'ws://localhost:*', // ✅ Allow WebSockets for local dev
         ],
-        imgSrc: ["'self'", 'data:', 'https://*.mapbox.com'],
+        imgSrc: ["'self'", 'data:', 'blob:', 'https://*.mapbox.com'],
         styleSrc: [
           "'self'",
           "'unsafe-inline'",
