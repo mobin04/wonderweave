@@ -42,7 +42,7 @@ exports.uploadUserPhoto = upload.single('photo');
 
 //IMPLEMENTING THE IMAGE RESIZING MIDDLEWARE.
 // it work after the photo was uploaded.
-exports.resizeUserPhoto = (req, res, next) => {
+exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   // if there is no image Just return next().
   if (!req.file) return next();
 
@@ -50,14 +50,14 @@ exports.resizeUserPhoto = (req, res, next) => {
   req.file.filename = `user-${req.user.id}-${Date.now()}`;
 
   // req.file.buffer is avaliable after image stored to memoryStorage.
-  sharp(req.file.buffer) // Sharp is an image resize tool
+  await sharp(req.file.buffer) // Sharp is an image resize tool
     .resize(500, 500) //it resize the image to square 500 width and 500 height.
     .toFormat('jpeg') // Format the image to jpeg.
     .jpeg({ quality: 90 }) // Qualilty set to 90%.
     .toFile(`public/img/users/${req.file.filename}`); //path to the file | file Name
 
   next();
-};
+});
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {}; // Create an empty object to store filtered properties

@@ -36,10 +36,37 @@ exports.uploadTourImages = upload.fields([
 // upload.single('image'); it produce req.file
 // upload.array('images', 5); it produce req.files
 
-exports.resizeTourImages = (req, res, next) => {
-  console.log(req.files);
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
+  if (!req.files.imageCover || !req.files.images) return next();
+
+  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`; // Set a coverImage name
+
+  // 1) Processing the cover image
+  await sharp(req.files.imageCover[0].buffer) // Sharp is an image resize tool
+    .resize(2000, 1333) //it resize the image to square 500 width and 500 height.
+    .toFormat('jpeg') // Format the image to jpeg.
+    .jpeg({ quality: 90 }) // Qualilty set to 90%.
+    .toFile(`public/img/tours/${req.body.imageCover}`); //path to the file | file Name
+
+  // 2) Images
+  req.body.images = [];
+
+  await Promise.all( // Await all the promises
+    req.files.images.map(async (file, i) => {
+      const fileName = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+
+      await sharp(file.buffer)
+        .resize(2000, 1333)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/tours/${fileName}`);
+
+      req.body.images.push(fileName);
+    }),
+  );
+  
   next();
-};
+});
 
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
