@@ -5,6 +5,8 @@ const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
 
+
+
 // router.param('id', tourController.checkID);
 
 // NESTED ROUTE EG:
@@ -53,6 +55,8 @@ router
   .patch(
     authController.protect,
     authController.restrictTo('admin', 'lead-guide'),
+    tourController.uploadTourImages,
+    tourController.resizeTourImages,
     tourController.updateTour,
   )
   .delete(

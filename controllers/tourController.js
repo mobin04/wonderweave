@@ -1,3 +1,5 @@
+const multer = require('multer');
+const sharp = require('sharp');
 const Tour = require('../models/tourModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
@@ -6,6 +8,38 @@ const factory = require('./handlerFactory');
 // const tours = JSON.parse(
 //   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
 // );
+
+const multerStorage = multer.memoryStorage();
+// Test the uploaded file is an image (Only upload images)
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image!, Please upload only images.', 400), false);
+  }
+};
+
+// Initialize Multer
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+// If we have  mix we could done like this. (upload.fields([]))
+exports.uploadTourImages = upload.fields([
+  // it produce req.files
+  { name: 'imageCover', maxCount: 1 }, // imageCover field only upload one img
+  { name: 'images', maxCount: 3 }, // images field only upload 3 imgs
+]);
+
+// if we didn't have this imageCover instread only have one field which accept multiple images or multiple files at the same time we could have done it like this.
+// upload.single('image'); it produce req.file
+// upload.array('images', 5); it produce req.files
+
+exports.resizeTourImages = (req, res, next) => {
+  console.log(req.files);
+  next();
+};
 
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
