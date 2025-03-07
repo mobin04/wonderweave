@@ -16,7 +16,14 @@ module.exports = class Email {
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
       //Sendgrid
-      return 1;
+      return nodemailer.createTransport({
+        host: "in-v3.mailjet.com",  // Mailjet SMTP server
+        port: 587 ,  // Use 587 for STARTTLS or 465 for SSL
+        auth: {
+          user: process.env.MJ_API_KEY_PUBLIC,  // Mailjet Public API Key
+          pass: process.env.MJ_API_KEY_PRIVATE,  // Mailjet Private API Key
+        },
+      });
     }
 
     return nodemailer.createTransport({
