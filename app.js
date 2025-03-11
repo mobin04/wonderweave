@@ -41,6 +41,13 @@ app.use(
           'blob:',
           'https://api.mapbox.com',
           'https://cdnjs.cloudflare.com',
+          'https://js.stripe.com',
+          'https://applepay.cdn-apple.com',
+        ],
+        frameSrc: [
+          "'self'",
+          'https://js.stripe.com', // ✅ Allow Stripe iframe
+          'https://applepay.cdn-apple.com',
         ],
         connectSrc: [
           "'self'",
@@ -48,6 +55,8 @@ app.use(
           'https://events.mapbox.com',
           'ws://127.0.0.1:*', // ✅ Allow WebSockets for Parcel HMR
           'ws://localhost:*', // ✅ Allow WebSockets for local dev
+          'https://api.stripe.com', // ✅ Allow Stripe iframe
+          'https://applepay.cdn-apple.com',
         ],
         imgSrc: ["'self'", 'data:', 'blob:', 'https://*.mapbox.com'],
         styleSrc: [
@@ -55,6 +64,8 @@ app.use(
           "'unsafe-inline'",
           'https://api.mapbox.com',
           'https://fonts.googleapis.com',
+          'https://www.gstatic.com',
+          'https://applepay.cdn-apple.com',
         ],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
       },

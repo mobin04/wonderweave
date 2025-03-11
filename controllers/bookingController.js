@@ -13,8 +13,8 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     mode: 'payment',
     success_url: `${req.protocol}://${req.get('host')}/?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
-    customer_email: req.user.email,
-    client_reference_id: req.params.tourID,
+    customer_email: req.user.email, // req.user came from the protect route middleware
+    client_reference_id: req.params.tourID, // Store the tour ID in the session for future reference
     line_items: [
       {
         price_data: {
