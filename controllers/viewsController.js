@@ -1,4 +1,6 @@
 const Tour = require('../models/tourModel');
+const Booking = require('../models/bookingModel');
+
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -16,8 +18,25 @@ exports.getOverview = catchAsync(async (req, res) => {
   });
 });
 
+// Booking Controller
+exports.getMyTours = catchAsync(async (req, res, next) => {
+  // 1) Find all bookings
+  const bookings = await Booking.find({ user: req.user.id });
+  console.log(bookings);
+
+  // 2) Find tours with the returned IDs
+  const tourIDs = bookings.map((el) => el.tour); 
+  const tours = await Tour.find({ _id: { $in: tourIDs } }); //This will return all tours with _id matching any of the provided tour IDs.
+  
+  res.status(200).render('overview', {
+    title: 'My Tours',
+    tours
+  })
+  
+});
+
 exports.getTour = catchAsync(async (req, res, next) => {
-  // 1)Get the data, for the requested tour (including reviws and guides)
+  // 1) Get the data, for the requested tour (including reviws and guides)
   const tour = await Tour.findOne({ slug: req.params.slug }).populate({
     path: 'reviews',
     fields: 'review rating user', //only need this fields to populate
