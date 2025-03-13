@@ -37,7 +37,7 @@ const reviewSchema = new mongoose.Schema(
 );
 
 //Compound Index: Ensure one review per user per tour (Database level)
-//If a user tries to submit another review for the same tour, MongoDB will reject it
+// Prevent duplicate reviews by the same user for a tour
 reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 
 //If a user tries to submit another review for the same tour (error handling)

@@ -49,6 +49,22 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A tour must have a name'],
     },
+    dates: [
+      {
+        date: {
+          type: Date,
+          required: [true, 'A tour must have avaliable date!'],
+        },
+        participants: {
+          type: Number,
+          default: 0,
+        },
+        soldOut: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
     priceDiscount: {
       type: Number,
       // CUSTOM VALIDATOR
@@ -181,7 +197,7 @@ tourSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'guides',
     select: '-__v -failedLoginAttempts',
-  })
+  });
   next();
 });
 
