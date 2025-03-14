@@ -6,6 +6,7 @@ const router = express.Router();
 // not follow the REST
 router.post('/signup', authController.signup);
 router.get('/verify-email/:token', authController.verifyEmail);
+router.post('/resend-verification', authController.resendVerificationEmail);
 
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);

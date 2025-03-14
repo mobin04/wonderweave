@@ -72,27 +72,76 @@ exports.signup = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     message: 'Verificaion email successfully send to your email.',
+    redirect: `/email-verify/${newUser._id}`, // Redirect ot emailVerifify page
   });
 });
 
 // VERIFY EMAIL AND SEND JWT TOKEN via cookie
-exports.verifyEmail = async(req, res, next) => {
+exports.verifyEmail = async (req, res, next) => {
   const hashedToken = crypto
     .createHash('sha256')
     .update(req.params.token)
     .digest('hex');
 
-  const user = await User.findOne({ emailVerificationToken: hashedToken });
+  const user = await User.findOne({
+    emailVerificationToken: hashedToken,
+    emailVerificationExpires: { $gt: Date.now() },
+  });
 
   if (!user)
     return next(new AppError('Invalid or expired verification token', 400));
 
   user.emailVerified = true;
   user.emailVerificationToken = undefined;
+  user.emailVerificationExpires = undefined;
   await user.save({ validateBeforeSave: false });
 
-  createSendToken(user, 201, res);
+  // LOG IN THE USER AFTER VERIFICATION
+  const token = signToken(user._id);
+  // Cookie options
+  const cookieOptions = {
+    expires: new Date( // Convert the days into millisecond
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
+    ),
+    httpOnly: true, //This ensure that cookie cannot be accesed or modified in anyway by the browser
+  };
+
+  // Defining the cookie
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true; //only secure in production
+  res.cookie('jwt', token, cookieOptions);
+
+  res.redirect('/');
 };
+
+exports.resendVerificationEmail = catchAsync(async (req, res, next) => {
+  // const { email } = req.body;
+
+  // Check if user exists
+  const user = await User.findOne({ email: req.body.email });
+  
+  if (!user) {
+    return next(new AppError('User with this email does not exist', 404));
+  }
+
+  // Check if already verified
+  if (user.emailVerified) {
+    return next(new AppError('Email is already verified', 400));
+  }
+
+  // Generate a new verification token
+  const verificationToken =  user.createEmailVerificationToken();
+  await user.save({ validateBeforeSave: false });
+
+  // Send verification email
+  const verificationURL = `${req.protocol}://${req.get('host')}/verify-email/${verificationToken}`;
+
+  await new Email(user, verificationURL).sendEmailVerification();
+
+  res.status(200).json({
+    status: 'success',
+    redirect: `/email-verify/${user._id}`,
+  });
+});
 
 // 2) IMPLEMENT LOGIN MIDDLEWARE FUNCTION
 exports.login = catchAsync(async (req, res, next) => {

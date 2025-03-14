@@ -48,6 +48,7 @@ const userSchema = new mongoose.Schema({
     default: false
   },
   emailVerificationToken: String,
+  emailVerificationExpires: Date,
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
@@ -143,6 +144,7 @@ userSchema.methods.isLocked = function () {
 userSchema.methods.createEmailVerificationToken = function(){
   const verificationToken = crypto.randomBytes(32).toString('hex');
   this.emailVerificationToken = crypto.createHash('sha256').update(verificationToken).digest('hex');
+  this.emailVerificationExpires = Date.now() + 10 * 60 * 1000; // 10 minutes expiration
   return verificationToken;
 }
 

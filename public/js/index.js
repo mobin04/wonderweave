@@ -4,6 +4,8 @@ import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
+import { signUp } from './signUp';
+import { resendVerification } from './resendMail';
 
 // DOM ELEMENTs
 const mapBox = document.getElementById('map');
@@ -12,6 +14,8 @@ const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-settings');
 const bookBtn = document.getElementById('book-tour');
+const signUpForm = document.querySelector('.form--signup');
+const resendButton = document.querySelector('.resend-btn');
 
 // MAP BOX
 if (mapBox) {
@@ -74,3 +78,28 @@ if (bookBtn) {
     bookTour(tourId);
   });
 }
+
+if (signUpForm) {
+  signUpForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+
+    signUp(name, email, password, passwordConfirm);
+  });
+}
+
+resendButton.addEventListener('click', async (e) => {
+  e.preventDefault();
+
+  const email = resendButton.getAttribute('data-email'); // Get email from data attribute
+  if (!email) {
+    console.error('Email not found in dataset!');
+    return;
+  }
+
+  console.log('Resending verification to:', email);
+  await resendVerification(email);
+});

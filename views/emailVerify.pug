@@ -1,0 +1,51 @@
+extends base
+
+block append head
+  style.
+    .content-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 200px); /* Adjust height dynamically */
+    }
+    .verification-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 750px;
+      text-align: center;
+    }
+    .verification-container h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 25px;
+    }
+    .verification-container p {
+      color: #666;
+      line-height: 1.5;
+      font-size: 18px;
+    }
+    .verification-container button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .verification-container button:hover {
+      background-color: #218838;
+    }
+
+block content 
+  .content-wrapper
+    .verification-container
+      h1 Email Verification Sent
+      p A verification email has been sent to your email address. Please verify your email to continue.
+      p If you did not receive the email, check your spam folder or click the button below to resend the verification email.
+      button.resend-btn(data-email=`${email}`) Resend Verification Email

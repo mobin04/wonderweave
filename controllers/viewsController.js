@@ -1,4 +1,6 @@
 const Tour = require('../models/tourModel');
+const User = require('../models/userModel');
+
 const Booking = require('../models/bookingModel');
 
 const AppError = require('../utils/appError');
@@ -25,14 +27,13 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
   console.log(bookings);
 
   // 2) Find tours with the returned IDs
-  const tourIDs = bookings.map((el) => el.tour); 
+  const tourIDs = bookings.map((el) => el.tour);
   const tours = await Tour.find({ _id: { $in: tourIDs } }); //This will return all tours with _id matching any of the provided tour IDs.
-  
+
   res.status(200).render('overview', {
     title: 'My Tours',
-    tours
-  })
-  
+    tours,
+  });
 });
 
 exports.getTour = catchAsync(async (req, res, next) => {
@@ -65,6 +66,28 @@ exports.getLoginForm = (req, res, next) => {
 exports.getAccount = (req, res) => {
   res.status(200).render('account', {
     title: 'Your account',
+  });
+};
+
+exports.getSignUpForm = (req, res) => {
+  res.status(200).render('signUp', {
+    title: 'Create new account',
+  });
+};
+
+exports.emailVerificationPage = async (req, res, next) => {
+  const newUser = await User.findById(req.params.id);
+  
+  if(!newUser){
+    return next(new AppError('No user found', 404));
+  }
+  
+  const {email} = newUser;
+  
+  
+  res.status(200).render('emailVerify', {
+    title: 'Verify Your email',
+    email
   });
 };
 
