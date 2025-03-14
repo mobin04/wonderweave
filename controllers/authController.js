@@ -133,7 +133,7 @@ exports.resendVerificationEmail = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // Send verification email
-  const verificationURL = `${req.protocol}://${req.get('host')}/verify-email/${verificationToken}`;
+  const verificationURL = `${req.protocol}://${req.get('host')}/api/v1/users/verify-email/${verificationToken}`;
 
   await new Email(user, verificationURL).sendEmailVerification();
 
