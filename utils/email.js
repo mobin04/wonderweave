@@ -10,7 +10,7 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0]; // Extract first name from full name
     this.url = url; // URL (e.g., for password reset, confirmation, etc.)
-    this.from = `Natour <${process.env.EMAIL_FROM}>`;
+    this.from = `Wonderweave <${process.env.EMAIL_FROM}>`;
   }
 
   newTransport() {
@@ -62,7 +62,7 @@ module.exports = class Email {
 
   // Helper method to send a welcome email
   async sendWelcome() {
-    await this.send('welcome', 'Welcome to Natours.'); // call the send method
+    await this.send('welcome', 'Welcome to Wonderweave.'); // call the send method
   }
 
   async sendPasswordReset() {
@@ -70,5 +70,9 @@ module.exports = class Email {
       'passwordReset',
       'Your password reset token (valid for only 10 minutes)',
     );
+  }
+
+  async sendEmailVerification() {
+    await this.send('emailVerification', 'Verify your email');
   }
 };

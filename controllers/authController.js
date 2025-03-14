@@ -54,13 +54,45 @@ exports.signup = catchAsync(async (req, res, next) => {
     role: req.body.role,
   });
 
-  const url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
-  await new Email(newUser, url).sendWelcome();
+  //  // Generate email verification token
+  const verificationToken = newUser.createEmailVerificationToken();
+  await newUser.save({ validateBeforeSave: false });
 
-  // Send token as response
-  createSendToken(newUser, 201, res);
+  // Send verification email
+  const verificationURL = `${req.protocol}://${req.get('host')}/api/v1/users/verify-email/${verificationToken}`;
+  await new Email(newUser, verificationURL).sendEmailVerification();
+
+  // const url = `${req.protocol}://${req.get('host')}/me`;
+  // console.log(url);
+  // await new Email(newUser, url).sendWelcome();
+
+  // // Send token as response
+  // createSendToken(newUser, 201, res);
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Verificaion email successfully send to your email.',
+  });
 });
+
+// VERIFY EMAIL AND SEND JWT TOKEN via cookie
+exports.verifyEmail = async(req, res, next) => {
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const user = await User.findOne({ emailVerificationToken: hashedToken });
+
+  if (!user)
+    return next(new AppError('Invalid or expired verification token', 400));
+
+  user.emailVerified = true;
+  user.emailVerificationToken = undefined;
+  await user.save({ validateBeforeSave: false });
+
+  createSendToken(user, 201, res);
+};
 
 // 2) IMPLEMENT LOGIN MIDDLEWARE FUNCTION
 exports.login = catchAsync(async (req, res, next) => {
@@ -232,7 +264,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 2) Generate the random reset token,
   const resetToken = user.createPasswordResetToken(); //store the reset Token
   await user.save({ validateBeforeSave: false }); // save the modified fields in order to work
-
 
   //handling error
   try {

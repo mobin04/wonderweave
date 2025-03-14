@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const validator = require('validator'); //npm validator for custom validation
 // eslint-disable-next-line import/no-extraneous-dependencies
 const bcrypt = require('bcryptjs');
+
 //CREATING USER SCHEMA.
 const userSchema = new mongoose.Schema({
   name: {
@@ -42,6 +43,11 @@ const userSchema = new mongoose.Schema({
       message: 'password are not the same',
     },
   },
+  emailVerified: {
+    type: Boolean,
+    default: false
+  },
+  emailVerificationToken: String,
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
@@ -133,6 +139,12 @@ userSchema.methods.createPasswordResetToken = function () {
 userSchema.methods.isLocked = function () {
   return this.lockUntil && this.lockUntil > Date.now();
 };
+
+userSchema.methods.createEmailVerificationToken = function(){
+  const verificationToken = crypto.randomBytes(32).toString('hex');
+  this.emailVerificationToken = crypto.createHash('sha256').update(verificationToken).digest('hex');
+  return verificationToken;
+}
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

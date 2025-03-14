@@ -1,0 +1,9 @@
+extends baseEmail
+
+block content
+  .email-container
+    h1 Welcome to Wonderweave!
+    p Thank you for signing up. Please verify your email address by clicking the button below.
+    a(href=`${url}`) Verify Email
+    p= `${url}`
+    p If you did not sign up for this account, please ignore this email.
