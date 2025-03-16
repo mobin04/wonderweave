@@ -28,6 +28,14 @@ app.set('views', path.join(__dirname, 'views'));
 // Serve static files (CSS, JS, images, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// DISABLE PARCEL-BUNDLER ERROR
+app.use((req, res, next) => {
+  if (req.url.endsWith('.map')) {
+    return res.status(204).send(); // No content, no error
+  }
+  next();
+});
+
 // Set security-related HTTP headers
 app.use(
   helmet({

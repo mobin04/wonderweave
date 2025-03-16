@@ -1354,4 +1354,158 @@ body {
   }
 }
 
-/* ******************************* */
+/* **************Booking page***************** */
+
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+.tour-content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e9f5e9;
+  height: 100vh;
+  margin: 0;
+}
+.tour-card-container {
+  width: 850px;
+  background-color: #e5f8e5;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.tour-top-card {
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+}
+.tour-top-card h2 {
+  margin-bottom: 25px;
+  font-size: 24px;
+  overflow-wrap: break-word;
+}
+.tour-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #f7f7f7;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+.tour-info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.tour-bottom-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 15px;
+}
+.tour-image-container img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+.tour-dates-container {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+}
+.tour-dates-container h4 {
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+.tour-date-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+.tour-date-item input {
+  cursor: pointer;
+}
+.tour-buy-button {
+  width: 100%;
+  background: #1a73e8;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 18px;
+}
+.tour-buy-button:hover {
+  -webkit-transform: translateY(-1px);
+  transform: translateY(-1px);
+  background-color: #0659c6;
+  -webkit-box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+/* ****************Success booking******************** */
+
+/* Booking Success Page Styles */
+.booking-success-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  background: #f4f4f4;
+}
+
+.booking-success-card {
+  text-align: center;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+}
+
+.booking-success-icon {
+  font-size: 3rem;
+  color: #28a745;
+  margin-bottom: 1rem;
+}
+
+.booking-success-title {
+  font-size: 3.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.booking-success-message {
+  font-size: 2rem;
+  color: #666;
+  margin: 1rem 0;
+  margin-bottom: 25px;
+}
+
+.booking-success-btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #0f9f1f;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background 0.3s;
+  font-size: 1.5rem;
+}
+
+.booking-success-btn:hover {
+  background: #10af23;
+  transform: translateY(-1px);
+}

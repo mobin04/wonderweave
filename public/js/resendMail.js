@@ -25,17 +25,3 @@ export const resendVerification = async (email) => {
     showAlert('error', err.response.data.message);
   }
 };
-
-// export const resendVerification = async function (email) {
-//   try {
-//     const res = await axios.post('/api/v1/auth/resend-verification', { email });
-
-//     if (res.data.status === 'success') {
-//       alert('Verification email sent!');
-//       window.location.href = `/email-verify?email=${email}`;
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     alert(err.response?.data?.message || "Error resending verification email!");
-//   }
-// }

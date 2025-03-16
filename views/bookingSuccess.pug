@@ -1,0 +1,9 @@
+extends base
+
+block content
+  .booking-success-container(data-tour=`{"id":"${tourId}", "selectedDate":"${selectedDate}"}`)
+    .booking-success-card
+      .booking-success-icon ✔
+      h2.booking-success-title Confirming...
+      p.booking-success-message Please wait while we confirm your booking...
+      p.booking-success-message Pending...

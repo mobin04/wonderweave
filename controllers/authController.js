@@ -118,7 +118,7 @@ exports.resendVerificationEmail = catchAsync(async (req, res, next) => {
 
   // Check if user exists
   const user = await User.findOne({ email: req.body.email });
-  
+
   if (!user) {
     return next(new AppError('User with this email does not exist', 404));
   }
@@ -129,7 +129,7 @@ exports.resendVerificationEmail = catchAsync(async (req, res, next) => {
   }
 
   // Generate a new verification token
-  const verificationToken =  user.createEmailVerificationToken();
+  const verificationToken = user.createEmailVerificationToken();
   await user.save({ validateBeforeSave: false });
 
   // Send verification email
@@ -388,3 +388,4 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 4) Log user in, send JWT
   createSendToken(user, 200, res);
 });
+

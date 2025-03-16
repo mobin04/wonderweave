@@ -10,8 +10,9 @@ router.get('/tours/:id/bookings', bookingController.getBookingsByTour);
 router.get('/users/:id/bookings', bookingController.getBookingsByUser);
 
 router.get(
-  '/checkout-session/:tourID',
+  '/checkout-session/:tourID/:date',
   authController.protect,
+  bookingController.checkAvailability,
   bookingController.getCheckoutSession,
 );
 
@@ -19,10 +20,9 @@ router.get(
 
 router
   .route('/')
-  .get(authController.restrictTo('admin', 'lead-guide') ,bookingController.getAllBookings)
+  .get(authController.restrictTo('admin', 'lead-guide', 'user') ,bookingController.getAllBookings)
   .post(
-    bookingController.checkAvailability,
-    // authController.restrictTo('admin', 'lead-guide', 'user'),
+    authController.protect,
     bookingController.createBooking,
   );
 

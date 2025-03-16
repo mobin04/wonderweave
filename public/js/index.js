@@ -6,6 +6,7 @@ import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
 import { signUp } from './signUp';
 import { resendVerification } from './resendMail';
+import { bookingConfirm } from './bookingConfirm';
 
 // DOM ELEMENTs
 const mapBox = document.getElementById('map');
@@ -13,9 +14,13 @@ const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-settings');
-const bookBtn = document.getElementById('book-tour');
+// const bookBtn = document.getElementById('book-tour');
 const signUpForm = document.querySelector('.form--signup');
 const resendButton = document.querySelector('.resend-btn');
+const bookBtn = document.querySelector('.tour-buy-button');
+const bookingSuccessContainer = document.querySelector(
+  '.booking-success-container',
+);
 
 // MAP BOX
 if (mapBox) {
@@ -71,35 +76,65 @@ if (userPasswordForm) {
   });
 }
 
-if (bookBtn) {
-  bookBtn.addEventListener('click', (e) => {
-    e.target.textContent = 'Processing...';
-    const { tourId } = e.target.dataset;
-    bookTour(tourId);
-  });
-}
+// if (bookBtn) {    *****************************************
+//   bookBtn.addEventListener('click', (e) => {
+//     e.target.textContent = 'Processing...';
+//     const { tourId } = e.target.dataset;
+//     bookTour(tourId);
+//   });
+// }
 
 if (signUpForm) {
-  signUpForm.addEventListener('submit', (e) => {
+  signUpForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('passwordConfirm').value;
 
-    signUp(name, email, password, passwordConfirm);
+    await signUp(name, email, password, passwordConfirm);
+
+    document.getElementById('name').innerText = '';
+    document.getElementById('email').innerText = '';
   });
 }
 
-resendButton.addEventListener('click', async (e) => {
-  e.preventDefault();
+if (resendButton) {
+  resendButton.addEventListener('click', async (e) => {
+    e.preventDefault();
 
-  const email = resendButton.getAttribute('data-email'); // Get email from data attribute
-  if (!email) {
-    console.error('Email not found in dataset!');
-    return;
-  }
+    const email = resendButton.getAttribute('data-email'); // Get email from data attribute
+    if (!email) {
+      console.error('Email not found in dataset!');
+      return;
+    }
 
-  console.log('Resending verification to:', email);
-  await resendVerification(email);
-});
+    console.log('Resending verification to:', email);
+    await resendVerification(email);
+  });
+}
+
+if (bookBtn) {
+  bookBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const tourId = bookBtn.getAttribute('data-tourId');
+
+    const selectedDate = document.querySelector(
+      'input[name="date"]:checked',
+    ).value;
+
+    bookTour(tourId, selectedDate);
+  });
+}
+
+if (bookingSuccessContainer) {
+  const tourData = JSON.parse(
+    bookingSuccessContainer.getAttribute('data-tour'),
+  );
+
+  const id = tourData.id;
+  const selectedDate = tourData.selectedDate
+  
+  bookingConfirm(id, selectedDate)
+}

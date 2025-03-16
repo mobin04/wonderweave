@@ -14,7 +14,8 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     mode: 'payment',
-    success_url: `${req.protocol}://${req.get('host')}/?tour=${req.params.tourID}&user=${req.user.id}&price=${tour.price}`,
+    success_url: `${req.protocol}://${req.get('host')}/success-booking/?tourId=${req.tourId}&selectedDate=${req.selectedDate}`,
+
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
     customer_email: req.user.email, // req.user came from the protect route middleware
     client_reference_id: req.params.tourID, // Store the tour ID in the session for future reference
@@ -41,22 +42,23 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createBookingCheckout = catchAsync(async (req, res, next) => {
-  // THIS IS ONLY TEMPERORY, because it UNSECURE: everyone can make bookings without paying.
-  const { tour, user, price } = req.query; // get the details from query string.
+// exports.createBookingCheckout = catchAsync(async (req, res, next) => {
+//   // THIS IS ONLY TEMPERORY, because it UNSECURE: everyone can make bookings without paying.
+//   const { tour, user, price } = req.query; // get the details from query string.
 
-  // If no tour, user, price then call next();
-  if (!tour && !user && !price) return next();
-  await Booking.create({ tour, user, price });
+//   // If no tour, user, price then call next();
+//   if (!tour && !user && !price) return next();
+//   await Booking.create({ tour, user, price });
 
-  // Redirecing to home '/'
-  res.redirect(req.originalUrl.split('?')[0]);
-  // next();
-});
+//   // Redirecing to home '/'
+//   res.redirect(req.originalUrl.split('?')[0]);
+//   // next();
+// });
 
 // Check if selected tour date is available
 exports.checkAvailability = catchAsync(async (req, res, next) => {
-  const { tourId, selectedDate } = req.body;
+  const tourId = req.params.tourID;
+  const selectedDate = req.params.date;
 
   const tour = await Tour.findById(tourId);
 
@@ -75,23 +77,61 @@ exports.checkAvailability = catchAsync(async (req, res, next) => {
   }
 
   if (tourDate.soldOut) {
-    return next(new AppError('This tour date is already fully booked', 400));
+    return next(
+      new AppError(
+        'The selected date is no longer available due to reaching maximum participants',
+        400,
+      ),
+    );
   }
 
-  req.tourDate = tourDate;
-  req.tour = tour;
+  req.selectedDate = selectedDate;
+  req.tourDate = tourDate.date;
+  req.tourId = tourId;
   next();
 });
 
+exports.isBooked = catchAsync(async(req, res, next) => {
+  const tourId = req.params.id;
+  const user = req.user.id
+  
+  const bookedTour = await Booking.findOne({
+    tour: tourId,
+    user
+  })
+  
+  if(bookedTour){
+    return next(new AppError('You already booked this tour!', 403))
+  }
+  
+  next()
+});
+
 exports.createBooking = catchAsync(async (req, res, next) => {
-  const { tour, tourDate } = req;
-  const { price, selectedDate } = req.body;
+  const { tourId, selectedDate } = req.body;
   const userId = req.user.id;
 
-  tourDate.participants += 1;
+  const tour = await Tour.findById(tourId);
 
-  if (tourDate.participants >= tour.maxGroupSize) {
-    tourDate.soldOut = true;
+  if (!tour) {
+    return next(new AppError('Tour not found with that id', 404));
+  }
+
+  // Find the tour date in the tour.dates array
+  const tourDateIndex = tour.dates.findIndex(
+    (date) => date.date.toISOString() === new Date(selectedDate).toISOString(),
+  );
+
+  if (tourDateIndex === -1) {
+    return next(new AppError('Selected date not found in tour dates', 400));
+  }
+
+  // Increase the participants count
+  tour.dates[tourDateIndex].participants += 1;
+
+  // Check if the tour is sold out
+  if (tour.dates[tourDateIndex].participants >= tour.maxGroupSize) {
+    tour.dates[tourDateIndex].soldOut = true;
   }
 
   await tour.save();
@@ -99,7 +139,7 @@ exports.createBooking = catchAsync(async (req, res, next) => {
   const newBooking = await Booking.create({
     tour: tour._id,
     user: userId,
-    price,
+    price: tour.price,
     selectedDate,
   });
 

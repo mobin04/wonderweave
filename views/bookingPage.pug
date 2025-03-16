@@ -1,0 +1,30 @@
+extends base
+
+block append head
+    link(rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap")
+
+block content
+  .tour-content-wrapper
+    .tour-card-container
+      .tour-top-card
+        h2= `${tour.name}`
+        .tour-info-row
+          .tour-info-item= `🏝️ ${tour.startLocation.description}`
+          .tour-info-item= `👥 ${tour.maxGroupSize} peoples`
+          .tour-info-item= `🚏 ${tour.locations.length} stops`
+          .tour-info-item= `📅 ${tour.startDates[0].toLocaleString('en-us', {month: 'long', year: 'numeric'})}`
+        .tour-info-row
+          .tour-info-item 💰 Total amount
+          .tour-info-item GST: $0
+          .tour-info-item= `$${tour.price}`
+      .tour-bottom-card
+        .tour-image-container
+          img(src=`/img/tours/${tour.imageCover}`, alt="Beach with boat")
+        .tour-dates-container
+          h4 Available Dates
+          each dateObj in tour.dates
+            - const formattedDate = new Date(dateObj.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' })
+            label.tour-date-item
+              input(type="radio" name="date" value=dateObj.date)
+              | #{formattedDate}
+          button.tour-buy-button(data-tourId=`${tour.id}`) Book Tour
