@@ -8,7 +8,6 @@ const stripe = Stripe(
 );
 
 export const bookTour = async (tourId, date) => {
-
   try {
     // 1) Get checkout session from API.
     const session = await axios({
@@ -21,9 +20,7 @@ export const bookTour = async (tourId, date) => {
       // REDIRECTING TO CHECKOUT PAGE
       sessionId: session.data.session.id,
     });
-    
   } catch (err) {
-    console.log(err);
     showAlert('error', err.response.data.message);
   }
 };

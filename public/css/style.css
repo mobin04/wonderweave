@@ -1509,3 +1509,78 @@ body {
   background: #10af23;
   transform: translateY(-1px);
 }
+
+/* *********************Create-review-page***************************** */
+
+.review-card-wrapper {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+  width: 550px;
+  text-align: center;
+  margin: 40px auto;
+}
+
+.review-card-title {
+  color: #333;
+  font-size: 2.2rem;
+  margin-bottom: 15px;
+  overflow-wrap: break-word;
+}
+
+.review-card-stars {
+  display: flex;
+  justify-content: center;
+  flex-direction: row-reverse;
+  font-size: 3.5rem;
+  cursor: pointer;
+  gap: 5px;
+}
+
+.review-card-stars input {
+  display: none;
+}
+
+.review-card-stars label {
+  color: #ccc;
+  transition: color 0.3s;
+}
+
+.review-card-stars input:checked ~ label,
+.review-card-stars label:hover,
+.review-card-stars label:hover ~ label {
+  color: rgb(58, 203, 22);
+}
+
+.review-card-textarea {
+  width: 100%;
+  height: 180px;
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid green;
+  resize: none;
+  font-size: 2rem;
+  font-family: Arial;
+}
+
+.review-card-submit {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  margin-top: 15px;
+  border-radius: 8px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    transform 0.2s;
+}
+
+.review-card-submit:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}

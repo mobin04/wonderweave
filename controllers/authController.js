@@ -62,12 +62,6 @@ exports.signup = catchAsync(async (req, res, next) => {
   const verificationURL = `${req.protocol}://${req.get('host')}/api/v1/users/verify-email/${verificationToken}`;
   await new Email(newUser, verificationURL).sendEmailVerification();
 
-  // const url = `${req.protocol}://${req.get('host')}/me`;
-  // console.log(url);
-  // await new Email(newUser, url).sendWelcome();
-
-  // // Send token as response
-  // createSendToken(newUser, 201, res);
 
   res.status(200).json({
     status: 'success',

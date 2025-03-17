@@ -1,5 +1,6 @@
 const Tour = require('../models/tourModel');
 const User = require('../models/userModel');
+const Review = require('../models/reviewModel');
 
 const Booking = require('../models/bookingModel');
 
@@ -45,7 +46,9 @@ exports.getTour = catchAsync(async (req, res, next) => {
   if (!tour) {
     return next(new AppError('There is no tour with that name!', 404));
   }
-  
+
+  const booking = await Booking.findOne({ tour: tour.id, user: req.user.id });
+  const review = await Review.findOne({ tour: tour.id, user: req.user.id });
 
   // 2)Build the template
 
@@ -53,7 +56,9 @@ exports.getTour = catchAsync(async (req, res, next) => {
 
   res.status(200).render('tour', {
     title: `${tour.name} Tour`,
+    booking,
     tour,
+    review,
   });
 });
 
@@ -91,6 +96,7 @@ exports.emailVerificationPage = async (req, res, next) => {
 
 exports.bookNow = async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
+
   res.status(200).render('bookingPage', {
     title: 'Book your tour',
     tour,
@@ -105,6 +111,21 @@ exports.successBooking = async (req, res, next) => {
     tourId,
     tourDate,
     selectedDate,
+  });
+};
+
+exports.manageReview = async (req, res, next) => {
+  const tour = await Tour.findById(req.params.tourId);
+
+  const review = await Review.findOne({
+    tour: req.params.tourId,
+    user: req.user.id,
+  });
+
+  res.status(200).render('reviewPage', {
+    title: 'New Review',
+    tour,
+    review,
   });
 };
 

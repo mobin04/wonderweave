@@ -24,6 +24,9 @@ router.get('/email-verify/:id', viewsController.emailVerificationPage);
 
 router.get('/book-now/:id', authController.protect,bookingController.isBooked, viewsController.bookNow);
 router.get('/success-booking', authController.protect, viewsController.successBooking);
+router.get('/add-review/:tourId', authController.protect, viewsController.manageReview)
+router.get('/update-review/:tourId', authController.protect, viewsController.manageReview)
+
 
 router.get(
   '/login',

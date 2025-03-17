@@ -7,6 +7,7 @@ import { bookTour } from './stripe';
 import { signUp } from './signUp';
 import { resendVerification } from './resendMail';
 import { bookingConfirm } from './bookingConfirm';
+import { manageReview } from './manageReview';
 
 // DOM ELEMENTs
 const mapBox = document.getElementById('map');
@@ -21,6 +22,7 @@ const bookBtn = document.querySelector('.tour-buy-button');
 const bookingSuccessContainer = document.querySelector(
   '.booking-success-container',
 );
+const reviewSubmitForm = document.querySelector('.review-card-form');
 
 // MAP BOX
 if (mapBox) {
@@ -49,7 +51,6 @@ if (userDataForm) {
     form.append('name', document.getElementById('name').value); //.append() add key-value pairs to form
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]); //files are array and select the first file
-    console.log(form);
     updateSettings(form, 'data');
   });
 }
@@ -109,7 +110,6 @@ if (resendButton) {
       return;
     }
 
-    console.log('Resending verification to:', email);
     await resendVerification(email);
   });
 }
@@ -134,7 +134,23 @@ if (bookingSuccessContainer) {
   );
 
   const id = tourData.id;
-  const selectedDate = tourData.selectedDate
-  
-  bookingConfirm(id, selectedDate)
+  const selectedDate = tourData.selectedDate;
+
+  bookingConfirm(id, selectedDate);
+}
+
+if (reviewSubmitForm) {
+  reviewSubmitForm.addEventListener('submit', async(e) => {
+    e.preventDefault();
+    const reviewId = document.querySelector('.review-card-submit').getAttribute('data-reviewId');
+    
+    const type = window.location.pathname.split('/')[1];
+    const tourId = document.querySelector('.review-card-form').getAttribute('data-tourId');
+    
+    const review = document.querySelector('.review-card-textarea').value;
+    const selectedRating = document.querySelector('input[name="rating"]:checked').value;
+
+    await manageReview(type, reviewId, tourId, selectedRating, review)
+
+  });
 }

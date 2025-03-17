@@ -45,7 +45,6 @@ export const logout = async () => {
     if (res.data.status === 'success') location.reload(true); // it will force reload the server not from browser cache.
   } catch (err) {
     alert('something went wrong ');
-    // console.log(err);
     // showAlert('error', err.response.data.message);
   }
 };

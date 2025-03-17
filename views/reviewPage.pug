@@ -1,0 +1,21 @@
+extends base
+
+mixin ratingStars(value)
+  if value === 5
+    input(type="radio" id=`stars-${value}` name="rating" value=`${value}` checked)
+  else
+    input(type="radio" id=`stars-${value}` name="rating" value=`${value}`)
+  label(for=`stars-${value}`) &#9733;
+
+block content 
+  .review-card-wrapper
+    h2.review-card-title= `${tour.name}`
+    form.review-card-form(data-tourId=`${tour.id}`)
+      .review-card-stars
+        each num in [5, 4, 3, 2, 1]
+          +ratingStars(num)
+      textarea.review-card-textarea(name="review" placeholder="Write your review here..." required)
+      if(review)
+        button.review-card-submit(type="submit" data-reviewId=`${review.id}`) Update Review
+      else 
+        button.review-card-submit(type="submit") Submit Review

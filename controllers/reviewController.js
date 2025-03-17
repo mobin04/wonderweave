@@ -5,7 +5,6 @@ const Booking = require('../models/bookingModel');
 const AppError = require('../utils/appError');
 // const catchAsync = require('../utils/catchAsync');
 
-
 exports.setTourUserIds = (req, res, next) => {
   // ALLOW NESTED ROUTES
   // if req.body don't have tour, then assign it from req.param.userId
@@ -15,30 +14,28 @@ exports.setTourUserIds = (req, res, next) => {
   next();
 }; //Middleware function for createReview controller below.(call this in review router)
 
-
 // Middleware to check if the user has booked the tour
-exports.checkIfBooked = catchAsync(async(req, res, next) => {
-  const {tourId} = req.params
-  const user = req.user.id
-    
+exports.checkIfBooked = catchAsync(async (req, res, next) => {
+  const { tourId } = req.params;
+  const user = req.user.id;
+
   const bookedTour = await Booking.findOne({
     tour: tourId,
-    user
-  })
-  
-  if(!bookedTour){
-    return next(new AppError('You can only review tours that you have booked.', 403))
+    user,
+  });
+
+  if (!bookedTour) {
+    return next(
+      new AppError('You can only review tours that you have booked.', 403),
+    );
   }
-  
-  next()
+
+  next();
 });
-
-
-
 
 // Factory function
 exports.getAllReviews = factory.getAll(Review);
 exports.getReview = factory.getOne(Review);
 exports.createReview = factory.createOne(Review);
 exports.updateReview = factory.updateOne(Review);
-exports.deleteReview = factory.deleteOne(Review); 
+exports.deleteReview = factory.deleteOne(Review);
