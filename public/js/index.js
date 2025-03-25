@@ -3,11 +3,23 @@ import '@babel/polyfill';
 import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
-import { bookTour } from './stripe';
 import { signUp } from './signUp';
 import { resendVerification } from './resendMail';
-import { bookingConfirm } from './bookingConfirm';
-import { manageReview } from './manageReview';
+import {
+  addGuideFunc,
+  addLocationAndDateFunc,
+  bookTourFunc,
+  changeUserRoleFunc,
+  confirmBookingFunc,
+  createReviewFunc,
+  createTourFunc,
+  deleteFunc,
+  deleteReviewFunc,
+  removeGuideFunc,
+  reviewSearchFunc,
+  searchUserFunc,
+  viewAllToursBtns,
+} from './admin';
 
 // DOM ELEMENTs
 const mapBox = document.getElementById('map');
@@ -15,7 +27,6 @@ const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-settings');
-// const bookBtn = document.getElementById('book-tour');
 const signUpForm = document.querySelector('.form--signup');
 const resendButton = document.querySelector('.resend-btn');
 const bookBtn = document.querySelector('.tour-buy-button');
@@ -23,6 +34,21 @@ const bookingSuccessContainer = document.querySelector(
   '.booking-success-container',
 );
 const reviewSubmitForm = document.querySelector('.review-card-form');
+const reviewDeleteBtn = document.querySelectorAll('.btn-delete');
+const tourAdminContainer = document.querySelector('.tour-admin-container');
+const adminTourDeleteBtn = document.querySelectorAll('.admin-tour-delete-btn');
+const saveTourBtn = document.querySelector('.tour-admin-btn--submit');
+const editTourBtn = document.getElementById('edit-tour--btn');
+const addBtns = document.querySelector('.tour-admin-btn--add');
+const searchInput = document.querySelector('.admin-users-search-input');
+const deleteButton = document.getElementById('confirm-delete');
+const changeRoleBtn = document.querySelectorAll('.admin-update-btn');
+const addLeadGuideBtn = document.querySelectorAll('.add-lead-guide-btn');
+const addGuideBtn = document.querySelectorAll('.add-guide-btn');
+const leadGuideRemoveBtn = document.querySelectorAll('.lead-guide-remove-btn');
+const guideRemoveBtn = document.querySelectorAll('.guide-remove-btn');
+const reviewSearchInp = document.querySelector('.admin-reviews-search-input');
+const deleteBtnReview = document.getElementById('confirm-delete-review');
 
 // MAP BOX
 if (mapBox) {
@@ -77,14 +103,6 @@ if (userPasswordForm) {
   });
 }
 
-// if (bookBtn) {    *****************************************
-//   bookBtn.addEventListener('click', (e) => {
-//     e.target.textContent = 'Processing...';
-//     const { tourId } = e.target.dataset;
-//     bookTour(tourId);
-//   });
-// }
-
 if (signUpForm) {
   signUpForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -114,43 +132,55 @@ if (resendButton) {
   });
 }
 
-if (bookBtn) {
-  bookBtn.addEventListener('click', (e) => {
-    e.preventDefault();
+// TOUR-BOOKING
+if (bookBtn) bookTourFunc(bookBtn);
 
-    const tourId = bookBtn.getAttribute('data-tourId');
+// BOOKING-CONFIRM
+if (bookingSuccessContainer) confirmBookingFunc(bookingSuccessContainer);
 
-    const selectedDate = document.querySelector(
-      'input[name="date"]:checked',
-    ).value;
+// CREATE REVIEW
+if (reviewSubmitForm) createReviewFunc(reviewSubmitForm);
 
-    bookTour(tourId, selectedDate);
+// DELETE REVIEW
+if (reviewDeleteBtn) deleteReviewFunc(reviewDeleteBtn);
+
+// VIEW-ALL TOUR FUNCTIONALITY
+if (tourAdminContainer) viewAllToursBtns();
+
+// DELETE TOUR
+if (adminTourDeleteBtn) {
+  adminTourDeleteBtn.forEach((btn) => {
+    deleteFunc(btn, 'tour');
   });
 }
 
-if (bookingSuccessContainer) {
-  const tourData = JSON.parse(
-    bookingSuccessContainer.getAttribute('data-tour'),
-  );
+// ADD DATE AND ADD LOCAION AND REMOVE BUTTON FUNCTIONAL ON .
+if (addBtns) addLocationAndDateFunc();
 
-  const id = tourData.id;
-  const selectedDate = tourData.selectedDate;
+// GET THE INFORMATIONS FROM TOUR CREATE FORM AND CREATE TOUR.-------------------------------
+[saveTourBtn, editTourBtn].forEach((btn, index) => {
+  if (btn) createTourFunc(btn, index === 0 ? 'create' : 'edit');
+});
 
-  bookingConfirm(id, selectedDate);
-}
+// SEARCH-USER FUNCTIONALITY
+if (searchInput) searchUserFunc(searchInput);
 
-if (reviewSubmitForm) {
-  reviewSubmitForm.addEventListener('submit', async(e) => {
-    e.preventDefault();
-    const reviewId = document.querySelector('.review-card-submit').getAttribute('data-reviewId');
-    
-    const type = window.location.pathname.split('/')[1];
-    const tourId = document.querySelector('.review-card-form').getAttribute('data-tourId');
-    
-    const review = document.querySelector('.review-card-textarea').value;
-    const selectedRating = document.querySelector('input[name="rating"]:checked').value;
+// DELETE USER IMPLEMENTATION
+[deleteButton, deleteBtnReview].forEach((btn, index) => {
+  if (btn) deleteFunc(btn, index === 0 ? 'user' : 'review');
+});
 
-    await manageReview(type, reviewId, tourId, selectedRating, review)
+// CHANGE USER ROLE IMPLEMENTATION
+if (changeRoleBtn) changeUserRoleFunc(changeRoleBtn);
 
-  });
-}
+// ADD LEAD-GUIDE & REGULAR GUIDE IMPLEMENTATION
+[addLeadGuideBtn, addGuideBtn].forEach((btn, index) => {
+  if (btn) addGuideFunc(btn, index === 0 ? 'lead-guide' : 'guide');
+});
+
+// GUIDEs REMOVE IMPLEMENTATION
+if (leadGuideRemoveBtn) removeGuideFunc(leadGuideRemoveBtn);
+if (guideRemoveBtn) removeGuideFunc(guideRemoveBtn);
+
+// REVIEW-SEARCH-FUNCTIONALITY
+if (reviewSearchInp) reviewSearchFunc(reviewSearchInp);

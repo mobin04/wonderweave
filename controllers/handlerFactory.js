@@ -38,6 +38,21 @@ exports.updateOne = (Model) =>
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
     // This method is much more simple
+    // ✅ Parse dates and locations before saving
+    if (req.body.dates) {
+      req.body.dates = JSON.parse(req.body.dates);
+    }
+    if (req.body.locations) {
+      req.body.locations = JSON.parse(req.body.locations);
+    }
+    if (req.body.startLocation) {
+      req.body.startLocation = JSON.parse(req.body.startLocation);
+    }
+    if (req.body.startDates) {
+      req.body.startDates = JSON.parse(req.body.startDates);
+    }
+    
+
     const doc = await Model.create(req.body);
     res.status(201).json({
       status: 'success',

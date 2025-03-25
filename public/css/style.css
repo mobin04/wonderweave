@@ -43,13 +43,46 @@ body {
   flex-direction: column;
 }
 
+
+
 .main {
-  background-color: #e2ece2;
-  padding: 8rem 6rem;
-  -webkit-box-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
   position: relative;
+  padding: 8rem 6rem;
+  flex: 1;
+  overflow: hidden; /* Ensures pseudo-elements stay within the container */
+  border-bottom: 1px solid white;
+  border-top: 1px solid white;
+}
+
+/* Blurred background */
+.main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/img/body-bg1.jpeg') center/cover no-repeat;
+  filter: blur(30px); /* Apply blur effect */
+  z-index: -1;
+}
+
+/* Dark overlay */
+.main::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1); /* Dark effect */
+  z-index: -1;
+}
+
+/* Ensure main content stays above the overlays */
+.main * {
+  position: relative;
+  z-index: 1;
 }
 
 .flex {
@@ -299,7 +332,6 @@ body {
 }
 
 .header {
-  background-color: rgb(53, 53, 53);
   background-blend-mode: multiply, multiply;
   padding: 0 5rem;
   height: 8rem;
@@ -314,7 +346,34 @@ body {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  overflow: hidden;
 }
+
+/* Pseudo-element to blur the background */
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/img/header-bg2.jpeg') center/cover no-repeat;
+  filter: blur(5px); /* Apply blur */
+  z-index: -1; /* Places the blurred image behind the content */
+}
+
+/* Dark overlay to reduce brightness */
+.header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: -1;
+}
+
 @media only screen and (max-width: 62.5em) {
   .header {
     -webkit-box-orient: vertical;
@@ -796,21 +855,33 @@ body {
 }
 
 .footer {
-  background: rgb(228, 228, 228);
-  background: linear-gradient(
-    50deg,
-    rgba(228, 228, 228, 1) 28%,
-    rgba(47, 47, 47, 1) 30%
-  );
+  position: relative;
   padding: 6rem 4rem 3rem 4rem;
   font-size: 1.4rem;
   display: grid;
   grid-template-columns: auto auto;
   grid-row-gap: 0.75rem;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
   justify-content: space-between;
+  background: url('/img/footer-bg.avif') center/cover no-repeat; /* Background Image */
+  background-size: cover;
+  background-position: center;
+  backdrop-filter: blur(10px); /* Apply blur effect */
 }
+
+/* Dark Overlay & Blur Effect */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: -1;
+}
+
 @media only screen and (max-width: 50em) {
   .footer {
     grid-template-columns: 1fr;
@@ -1078,13 +1149,15 @@ body {
 .card-container {
   max-width: 120rem;
   margin: 0 auto;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  /* display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 7rem;
+  grid-gap: 7rem; */
 }
 
 .card {
-  border-radius: 3px;
+  border-radius: 10px;
   overflow: hidden;
   -webkit-box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
@@ -1100,6 +1173,7 @@ body {
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
+  margin: 2rem;
 }
 .card__header {
   position: relative;
@@ -1584,3 +1658,4 @@ body {
   background-color: #218838;
   transform: scale(1.05);
 }
+

@@ -39,7 +39,13 @@ exports.uploadTourImages = upload.fields([
 exports.resizeTourImages = catchAsync(async (req, res, next) => {
   if (!req.files.imageCover || !req.files.images) return next();
 
-  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`; // Set a coverImage name
+  if (!req.params.id) {
+    const tourName = req.body.name.toLowerCase();
+    const formatedName = tourName.split(' ').join('-');
+    req.body.imageCover = `tour-${formatedName}-${Date.now()}-cover.jpeg`; // Set a coverImage name
+  } else {
+    req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`; // Set a coverImage name
+  }
 
   // 1) Processing the cover image
   await sharp(req.files.imageCover[0].buffer) // Sharp is an image resize tool
@@ -51,9 +57,19 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
   // 2) Images
   req.body.images = [];
 
-  await Promise.all( // Await all the promises
+  await Promise.all(
+    // Await all the promises
     req.files.images.map(async (file, i) => {
-      const fileName = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+      let fileName;
+
+      if (!req.params.id) {
+        const tourName = req.body.name.toLowerCase();
+        fileName = tourName.split(' ').join('-');
+        req.body.name = req.body.name.toLowerCase();
+        fileName = `tour-${req.body.name}-${Date.now()}-${i + 1}.jpeg`;
+      } else {
+        fileName = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+      }
 
       await sharp(file.buffer)
         .resize(2000, 1333)
@@ -64,7 +80,7 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
       req.body.images.push(fileName);
     }),
   );
-  
+
   next();
 });
 
@@ -249,3 +265,59 @@ exports.getDistances = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+
+// ADD LEAD-GUIDE OR GUIDE IN TO TOUR
+exports.addLeadGuide = catchAsync(async (req, res, next) => {
+  const { guideId } = req.body; // Get guide ID from request body
+  const { tourId } = req.params; // Get tour ID from URL
+
+  const tour = await Tour.findById(tourId).populate('guides'); // Populate guides to access roles
+
+  if (!tour) {
+      return next(new AppError('Tour not found', 404));
+  }
+
+  // Check if the new guide is already in the tour
+  if (tour.guides.some(guide => guide._id.toString() === guideId)) {
+      return next(new AppError('Guide is already assigned!', 400));
+  }
+
+
+  // Add guide to guides array
+  tour.guides.push(guideId);
+  
+  await tour.save();
+
+  res.status(200).json({ 
+      status: 'success',
+      message: "Lead guide added successfully!",
+      tour,
+  });
+});
+
+// REMOVE LEAD-GUIDE OR GUIDE FROM TOUR
+exports.removeGuide = catchAsync(async (req, res, next) => {
+  const { guideId } = req.body; // Guide ID from request body
+  const { tourId } = req.params; // Tour ID from URL
+
+  // Find the tour
+  const tour = await Tour.findById(tourId);
+
+  if (!tour) {
+      return next(new AppError('Tour not found', 404));
+  }
+
+  // Remove guide from the guides array
+  // tour.guides = tour.guides.filter(id => id.toString() !== guideId.toString());
+  tour.guides.pull(guideId);
+  tour.markModified('guides');
+  await tour.save();
+
+  res.status(200).json({
+      status: 'success',
+      message: 'Guide removed successfully!',
+      tour
+  });
+});
+

@@ -1,0 +1,1238 @@
+/************** Admin Tour management *****************/
+/* Tour Management Admin Styles */
+
+.tour-admin-container {
+  max-width: 1200px;
+  width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+  font-family: 'Lato', sans-serif;
+}
+
+.tour-admin-title {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.tour-admin-subtitle {
+  color: #2c3e50;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.tour-admin-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+/* Buttons */
+.tour-admin-btn {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.tour-admin-btn--create {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.tour-admin-btn--create:hover {
+  background-color: #27ae60;
+}
+
+.tour-admin-btn--list {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.tour-admin-btn--list:hover {
+  background-color: #2980b9;
+}
+
+.tour-admin-btn--edit {
+  background-color: #f39c12;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+}
+
+.tour-admin-btn--edit:hover {
+  background-color: #e67e22;
+}
+
+.tour-admin-btn--delete {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  font-size: 1.1rem;
+}
+
+.tour-admin-btn--delete:hover {
+  background-color: #c0392b;
+}
+
+.tour-admin-btn--submit {
+  background-color: #2ecc71;
+  color: #fff;
+  padding: 0.8rem 2rem;
+}
+
+.tour-admin-btn--submit:hover {
+  background-color: #27ae60;
+}
+
+.tour-admin-btn--cancel {
+  background-color: #95a5a6;
+  color: #fff;
+  padding: 0.8rem 2rem;
+  margin-left: 1rem;
+}
+
+.tour-admin-btn--cancel:hover {
+  background-color: #7f8c8d;
+}
+
+.tour-admin-btn--back {
+  background-color: #34495e;
+  color: #fff;
+}
+
+.tour-admin-btn--back:hover {
+  background-color: #2c3e50;
+}
+
+.tour-admin-btn--small {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.tour-admin-btn--add {
+  background-color: #3498db;
+  color: #fff;
+  margin-top: 1rem;
+}
+
+.tour-admin-btn--add:hover {
+  background-color: #2980b9;
+}
+
+.tour-admin-btn--remove {
+  background-color: #e74c3c;
+  color: #fff;
+  margin-left: 1rem;
+}
+
+.tour-admin-btn--remove:hover {
+  background-color: #c0392b;
+}
+
+/* Table Styles */
+.tour-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tour-admin-table th,
+.tour-admin-table td {
+  padding: 1.5rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.tour-admin-table th {
+  background-color: #34495e;
+  color: #fff;
+  font-weight: 600;
+  font-size: 17px;
+}
+.tour-admin-table td {
+  font-size: 15px;
+}
+
+.tour-admin-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.tour-admin-actions-cell {
+  white-space: nowrap;
+}
+
+.tour-admin-difficulty {
+  padding: 0.3rem 0.6rem;
+  border-radius: 3px;
+  font-weight: 600;
+  text-align: center;
+  display: inline-block;
+  min-width: 80px;
+}
+
+.tour-admin-difficulty--easy {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.tour-admin-difficulty--medium {
+  background-color: #f39c12;
+  color: #fff;
+}
+
+.tour-admin-difficulty--difficult {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+/* Form Styles */
+.tour-admin-form {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tour-admin-form-container {
+  width: 100%;
+}
+
+.tour-admin-form-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.tour-admin-form-heading {
+  color: #2c3e50;
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.tour-admin-form-group {
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.tour-admin-form-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 0;
+}
+
+.tour-admin-form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #34495e;
+}
+
+.tour-admin-form-input,
+.tour-admin-form-select,
+.tour-admin-form-textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1.5rem;
+}
+
+.tour-admin-form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.tour-admin-form-input:focus,
+.tour-admin-form-select:focus,
+.tour-admin-form-textarea:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.tour-admin-form-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Date and Location Items */
+.tour-admin-date-item,
+.tour-admin-location-item {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  border: 1px solid #ecf0f1;
+}
+
+.tour-admin-dates-container,
+.tour-admin-locations-container {
+  margin-top: 1rem;
+}
+
+
+
+/* Admin Dashboard Styles */
+
+/* Variables */
+:root {
+  --color-primary: #06cf09;
+  --color-primary-light: #06cf09;
+  --color-primary-dark: #1ea600;
+  --color-danger: #e53e3e;
+  --color-danger-light: #f56565;
+
+  --color-bg: #f8fafc;
+  --color-bg-dark: #e2e8f0;
+  --color-bg-sidebar: rgb(126, 130, 127);
+
+  --color-text: #334155;
+  --color-text-light: #64748b;
+  --color-text-dark: #0f172a;
+  --color-text-sidebar: #f1f5f9;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+
+  --font-size-xs: 1.5rem;
+  --font-size-sm: 1.2rem;
+  --font-size-md: 1.5rem;
+  --font-size-lg: 1.9rem;
+  --font-size-xl: 2rem;
+  --font-size-2xl: 1.9rem;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.9rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+}
+
+/* Global Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Layout */
+.admin-dashboard {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  position: relative;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  overflow: hidden; /* Ensures pseudo-elements stay inside */
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  color: white;
+}
+
+/* Blurred background */
+.admin-sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/img/body-bg1.jpeg') center/cover no-repeat; /* Replace with correct image */
+  background-attachment: fixed;
+  filter: blur(10px); /* Apply blur effect */
+  z-index: -1;
+}
+
+/* Dark overlay */
+.admin-sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Dark effect */
+  z-index: -1;
+}
+
+/* Ensure sidebar content stays above the effects */
+.admin-sidebar * {
+  position: relative;
+  z-index: 1;
+}
+
+.admin-logo {
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.762);
+}
+
+.admin-logo-text {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+.admin-menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.admin-menu-title {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: var(--space-md);
+}
+
+.admin-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--border-radius-md);
+  transition: background-color 0.2s;
+}
+
+.admin-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.183);
+}
+
+.admin-menu-item--active {
+  background-color: var(--color-primary);
+}
+
+.admin-menu-icon {
+  font-size: var(--font-size-lg);
+}
+
+/* Content */
+.admin-content {
+  padding: var(--space-xl);
+  overflow-y: auto;
+}
+
+.admin-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.admin-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
+.admin-section-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-text-dark);
+}
+
+.admin-back-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-bg-dark);
+  border-radius: var(--border-radius-sm);
+  font-weight: 500;
+  color: var(--color-text);
+  transition: background-color 0.2s;
+}
+
+.admin-back-btn:hover {
+  background-color: #d1d5db;
+}
+
+/* Stats Cards */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.admin-stat-card {
+  background-color: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.admin-stat-number {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.admin-stat-title {
+  font-size: var(--font-size-md);
+  color: var(--color-text-light);
+}
+
+/* Recent Activities */
+.admin-recent-section {
+  background-color: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.admin-recent-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-lg);
+  color: var(--color-text-dark);
+}
+
+.admin-recent-activities {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.admin-activity {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-bg-dark);
+}
+
+.admin-activity:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.admin-activity-icon {
+  font-size: var(--font-size-lg);
+}
+
+.admin-activity-details {
+  flex: 1;
+}
+
+.admin-activity-title {
+  font-weight: 500;
+}
+
+.admin-activity-time {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+/* Tours Grid */
+.admin-tours-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+.admin-tour-card {
+  background-color: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.admin-tour-name {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+
+.admin-tour-stats {
+  display: flex;
+  gap: var(--space-md);
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+}
+
+.admin-tour-actions {
+  margin-top: var(--space-md);
+}
+
+/* Tour Detail */
+.admin-tour-guides-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--space-xl);
+}
+
+.admin-tour-guides-lead,
+.admin-tour-guides-regular {
+  background-color: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.admin-tour-guides-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-lg);
+  color: var(--color-text-dark);
+}
+
+.admin-tour-guide-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.admin-tour-guide-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-bg);
+}
+
+.admin-tour-guide-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #cbd5e1;
+}
+
+.admin-tour-guide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-tour-guide-details {
+  flex: 1;
+}
+
+.admin-tour-guide-name {
+  font-weight: 500;
+}
+
+.admin-tour-guide-email {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.admin-tour-guide-add-title {
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  margin-bottom: var(--space-md);
+  color: var(--color-text-dark);
+}
+
+.admin-tour-guide-form {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.admin-tour-guide-select {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-bg-dark);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+}
+
+/* Guides Grid */
+.admin-guides-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.admin-guides-subtitle {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+  color: var(--color-text-dark);
+}
+
+.admin-guides-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+.admin-guide-card {
+  background-color: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  gap: var(--space-md);
+}
+
+.admin-guide-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #cbd5e1;
+}
+
+.admin-guide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-guide-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.admin-guide-name {
+  font-weight: 600;
+}
+
+.admin-guide-email {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.admin-guide-tours {
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-xs);
+}
+
+.admin-guide-tours-label {
+  color: var(--color-text-light);
+  margin-right: var(--space-xs);
+}
+
+/* Users Section */
+.admin-users-search {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.admin-users-search-input {
+  flex: 1;
+  padding: var(--space-md);
+  border: 1px solid var(--color-bg-dark);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
+}
+
+.admin-users-table-container {
+  background-color: white;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  margin-bottom: var(--space-xl);
+}
+
+.admin-users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-users-table-header {
+  background-color: var(--color-bg);
+}
+
+.admin-users-table-cell {
+  padding: var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-bg-dark);
+}
+
+.admin-users-role {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+.admin-users-role--user {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.admin-users-role--guide {
+  background-color: #fef9c3;
+  color: #854d0e;
+}
+
+.admin-users-role--lead-guide {
+  background-color: #f0fdf4;
+  color: #166534;
+}
+
+.admin-users-status {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+.admin-users-status--active {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.admin-users-status--inactive {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.admin-users-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+.admin-pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--border-radius-md);
+  background-color: white;
+  border: 1px solid var(--color-bg-dark);
+  color: var(--color-text);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.admin-pagination-btn:hover {
+  background-color: var(--color-bg);
+}
+
+.admin-pagination-numbers {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.admin-pagination-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--border-radius-md);
+  background-color: white;
+  border: 1px solid var(--color-bg-dark);
+  color: var(--color-text);
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.admin-pagination-number:hover {
+  background-color: var(--color-bg);
+}
+
+.admin-pagination-number--active {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+/* Buttons */
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--border-radius-sm);
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.admin-btn--primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.admin-btn--primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.admin-btn--danger {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+.admin-btn--danger:hover {
+  background-color: var(--color-danger-light);
+}
+
+/*Delete button*/
+
+/* Blur effect when modal appears */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px);
+  display: none;
+}
+
+/* Modal Box */
+.modal-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  z-index: 1000;
+}
+
+.modal-box h2 {
+  margin: 15px;
+}
+
+.modal-box p {
+  color: red;
+  margin-bottom: 20px;
+  font-weight: 300;
+}
+
+/* Buttons */
+.modal-actions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.admin-update-btn {
+  color: white;
+  background-color: rgb(22, 176, 22);
+}
+.admin-update-btn:hover {
+  background-color: rgb(0, 207, 0);
+}
+ /************************ MANAGE-REVIEWS *********************************/
+ .admin-reviews-container {
+  width: calc(100% - 6rem); /* Subtract body's 3rem padding on both sides */
+  max-width: 1200px; /* Keep the same max-width */
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+  color: #2d3436;
+  background-color: #f7f9fc;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+ }
+.admin-reviews-header {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-reviews-title {
+  color: #2d3436;
+  font-size: 2rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.admin-reviews-search-container {
+  display: flex;
+  align-items: center;
+}
+
+.admin-reviews-search-form {
+  display: flex;
+  gap: 0.5rem;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.admin-reviews-search-input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #dfe6e9;
+  border-radius: 0.25rem;
+  flex-grow: 1;
+  font-size: 1.5rem;
+  transition: border-color 0.3s;
+}
+
+.admin-reviews-search-input:focus {
+  outline: none;
+  border-color: #55efc4;
+  box-shadow: 0 0 0 3px rgba(85, 239, 196, 0.2);
+}
+
+.admin-reviews-search-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #04d30b;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.admin-reviews-search-button:hover {
+  background-color: #57e447;
+}
+
+.admin-reviews-clear-search {
+  padding: 0.75rem 1rem;
+  color: #636e72;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.admin-reviews-clear-search:hover {
+  text-decoration: underline;
+}
+
+.admin-reviews-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 100%; /* Ensures it always takes full width */
+  min-height: 300px; /* Keeps space even if empty */
+  justify-content: center;
+  position: relative;
+}
+
+.admin-reviews-user-group {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.admin-reviews-user-info {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #f1f9f5;
+  border-bottom: 1px solid #e8f5e9;
+}
+
+.admin-reviews-user-photo {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-reviews-user-name {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+.admin-reviews-user-reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.admin-reviews-card {
+  border: 1px solid #dfe6e9;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.admin-reviews-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.admin-reviews-card-header {
+  padding: 1rem 1.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dfe6e9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-reviews-tour-name {
+  font-size: 1.4rem;
+}
+.admin-reviews-tour-name a {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color:rgb(6, 176, 0);
+}
+
+.admin-reviews-tour-link {
+  color: #0984e3;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.admin-reviews-tour-link:hover {
+  text-decoration: underline;
+}
+
+.admin-reviews-date {
+  font-size: 0.85rem;
+  color: #636e72;
+}
+
+.admin-reviews-card-body {
+  padding: 1rem 1.5rem;
+}
+
+.admin-reviews-rating {
+  margin-bottom: 0.75rem;
+}
+
+.admin-reviews-stars {
+  color: #fdcb6e;
+  font-size: 2rem;
+  letter-spacing: 2px;
+}
+
+.admin-reviews-rating-value {
+  font-size: 1.4rem;
+  color: #636e72;
+}
+
+.admin-reviews-text {
+  line-height: 1.6;
+  color: #2d3436;
+}
+
+.admin-reviews-card-actions {
+  padding: 1rem 1.5rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #dfe6e9;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.admin-reviews-delete-button {
+  padding: 0.5rem 1rem;
+  background-color: rgb(0, 175, 0);
+  color: white;
+  border: none;
+  border-radius: 0.50rem;
+  cursor: pointer;
+  font-size: 1.3rem;
+  transition: background-color 0.3s;
+}
+
+.admin-reviews-delete-button:hover {
+  background-color: red;
+}
+
+.admin-reviews-empty {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #888;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 0.5rem; 
+  display: none; /* Hide by default */
+}
+
+.admin-reviews-message {
+  font-size: 1.2rem;
+  color: #636e72;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .admin-reviews-container {
+    padding: 1rem;
+  }
+  
+  .admin-reviews-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .admin-reviews-search-form {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .admin-reviews-search-button {
+    width: 100%;
+  }
+}

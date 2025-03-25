@@ -29,10 +29,26 @@ export const manageReview = async (type, reviewId, tourId, rating, review) => {
           : 'Review updated successfully',
       );
       window.setTimeout(() => {
-        location.assign('/me'); // Navigates to /me
+        location.assign('/get-my-reviews'); // Navigates to /me
       }, 1500);
     }
   } catch (err) {
-    console.log(err);
+    showAlert('error', err.response.data.message);
+  }
+};
+
+export const deleteReview = async (reviewId) => {
+  try {
+    const res = await axios({
+      method: 'DELETE',
+      url: `http://127.0.0.1:8000/api/v1/reviews/${reviewId}`,
+    });
+
+    showAlert('success', 'Review deleted successfully!');
+    window.setTimeout(() => {
+      location.assign('/get-my-reviews');
+    }, 1200);
+  } catch (err) {
+    showAlert('error', err.response.data.message);
   }
 };

@@ -1,0 +1,119 @@
+extends base  
+
+block content 
+  #createTourForm.tour-admin-form
+    h2.tour-admin-subtitle= `${tour ? 'Edit Tour': 'Create New Tour'}`
+    form.tour-admin-form-container(action="/admin/tours" method="POST")
+      .tour-admin-form-section
+        h3.tour-admin-form-heading Basic Information
+        .tour-admin-form-group
+          label.tour-admin-form-label(for="name") Tour Name
+          input.tour-admin-form-input(type="text" id="name" name="name" maxlength="60" value=`${tour ? tour.name: ''}` required)
+
+        .tour-admin-form-row
+          .tour-admin-form-group
+            label.tour-admin-form-label(for="duration") Duration (days)
+            input.tour-admin-form-input(type="number" id="duration" name="duration" min="1" required value=`${tour ? tour.duration: ''}`)
+
+          .tour-admin-form-group
+            label.tour-admin-form-label(for="maxGroupSize") Max Group Size
+            input.tour-admin-form-input(type="number" id="maxGroupSize" name="maxGroupSize" min="1" required value=`${tour ? tour.maxGroupSize: ''}`)
+
+        .tour-admin-form-row
+          .tour-admin-form-group
+            label.tour-admin-form-label(for="difficulty") Difficulty
+            select.tour-admin-form-select(id="difficulty" name="difficulty" required )
+              option(value="easy") Easy
+              option(value="medium") Medium
+              option(value="difficult") Difficult
+
+          .tour-admin-form-group
+            label.tour-admin-form-label(for="price") Price ($)
+            input.tour-admin-form-input(type="number" id="price" name="price" min="0" step="0.01" required value=`${tour ? tour.price: ''}`)
+
+        .tour-admin-form-group
+          label.tour-admin-form-label(for="summary") Summary
+          input.tour-admin-form-input(type="text" id="summary" name="summary" maxlength="80" required value=`${tour ? tour.summary: ''}`)
+
+        .tour-admin-form-group
+          label.tour-admin-form-label(for="description") Description
+          textarea.tour-admin-form-textarea(id="description" name="description" rows="5" maxlength="700" required)= `${tour ? tour.description: ''}`
+
+        .tour-admin-form-group
+          label.tour-admin-form-label(for="imageCover") Cover Image (select only 1 image)
+          input.tour-admin-form-input(type="file" id="imageCover" name="imageCover" accept="image/*" required)
+
+        .tour-admin-form-group
+          label.tour-admin-form-label(for="images") Images (Select at only 3 images)
+          input.tour-admin-form-input(type="file" id="images" name="images" accept="image/*" multiple required)
+          span#imageCountMsg(style="color: red; display: none;") Please select 3 tour images
+
+        .tour-admin-form-group
+          label.tour-admin-form-label
+            input(type="checkbox" id="secretTour" name="secretTour")
+            span Secret Tour
+
+      .tour-admin-form-section
+        h3.tour-admin-form-heading Start Location
+        .tour-admin-form-group
+          label.tour-admin-form-label(for="startLocationAddress") Address
+          input.tour-admin-form-input(type="text" id="startLocationAddress" name="startLocation[address]" required value=`${tour ? tour.startLocation.address: ''}`)
+
+        .tour-admin-form-group
+          label.tour-admin-form-label(for="startLocationDescription") Description(name of the place)
+          input.tour-admin-form-input(type="text" id="startLocationDescription" name="startLocation[description]" maxlength="20" required value=`${tour ? tour.startLocation.description: ''}`)
+
+        .tour-admin-form-row
+          .tour-admin-form-group
+            label.tour-admin-form-label(for="startLocationLat") Latitude
+            input.tour-admin-form-input(type="number" id="startLocationLat" name="startLocation[coordinates][1]" step="any" value=`${tour ? tour.startLocation.coordinates[0]: ''}`)
+
+          .tour-admin-form-group
+            label.tour-admin-form-label(for="startLocationLng") Longitude
+            input.tour-admin-form-input(type="number" id="startLocationLng" name="startLocation[coordinates][0]" step="any" value=`${tour ? tour.startLocation.coordinates[1]: ''}`)
+
+      .tour-admin-form-section
+        h3.tour-admin-form-heading Tour Dates
+        #tourDatesContainer.tour-admin-dates-container
+          .tour-admin-date-item
+            .tour-admin-form-row
+              .tour-admin-form-group
+                label.tour-admin-form-label(for="tourDate0") Date
+                input.tour-admin-form-input(type="date" id="tourDate0" name="dates[0][date]" required)
+
+              .tour-admin-form-group
+                label.tour-admin-form-label(for="tourParticipants0") Participants
+                input.tour-admin-form-input(type="number" id="tourParticipants0" name="dates[0][participants]" min="0" value="0")
+
+        button.tour-admin-btn.tour-admin-btn--small.tour-admin-btn--add(type="button") Add Date
+
+      .tour-admin-form-section
+        h3.tour-admin-form-heading Locations
+        #locationsContainer.tour-admin-locations-container
+          .tour-admin-location-item
+            .tour-admin-form-row
+              .tour-admin-form-group
+                label.tour-admin-form-label(for="locationDay0") Day
+                input.tour-admin-form-input(type="number" id="locationDay0" name="locations[0][day]" min="1" required)
+
+              .tour-admin-form-group
+                label.tour-admin-form-label(for="locationDescription0") Description
+                input.tour-admin-form-input(type="text" id="locationDescription0" name="locations[0][description]" maxlength="40" required)
+
+            .tour-admin-form-row
+              .tour-admin-form-group
+                label.tour-admin-form-label(for="locationLat0") Latitude
+                input.tour-admin-form-input(type="number" id="locationLat0" name="locations[0][coordinates][1]" step="any" required)
+
+              .tour-admin-form-group
+                label.tour-admin-form-label(for="locationLng0") Longitude
+                input.tour-admin-form-input(type="number" id="locationLng0" name="locations[0][coordinates][0]" step="any" required)
+
+        button.tour-admin-btn.tour-admin-btn--small.tour-admin-btn--add(type="button") Add Location
+
+      .tour-admin-form-actions
+        if (tour)
+          button.tour-admin-btn.tour-admin-btn--submit#edit-tour--btn(type="submit" data-tourId=`${tour.id}`) Save changes
+        else
+          button.tour-admin-btn.tour-admin-btn--submit(type="submit") Create Tour
+        a.tour-admin-btn.tour-admin-btn--cancel(href='/manage-tours') Cancel

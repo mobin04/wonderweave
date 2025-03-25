@@ -6,7 +6,13 @@ block append head
   //- script(src="https://js.stripe.com/v3/")
   script(src='https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js')
   link(href='https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css' rel='stylesheet')
-
+  //-Scroll to the top when page loaded
+  script.
+    window.onload = function () {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      },0);
+    };
 
 //- Its like a functin called mixin useful when we have repetative code.
 mixin overviewBox(label, text, icon)

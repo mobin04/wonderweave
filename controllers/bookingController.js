@@ -9,6 +9,7 @@ const AppError = require('../utils/appError');
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get currently booked tour.
   const tour = await Tour.findById(req.params.tourID);
+  console.log(`Image URL: https://natours.dev/img/tours/${tour.imageCover}`);
 
   // 2) Create checkout session
   const session = await stripe.checkout.sessions.create({
@@ -91,20 +92,20 @@ exports.checkAvailability = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.isBooked = catchAsync(async(req, res, next) => {
+exports.isBooked = catchAsync(async (req, res, next) => {
   const tourId = req.params.id;
-  const user = req.user.id
-  
+  const user = req.user.id;
+
   const bookedTour = await Booking.findOne({
     tour: tourId,
-    user
-  })
-  
-  if(bookedTour){
-    return next(new AppError('You already booked this tour!', 403))
+    user,
+  });
+
+  if (bookedTour) {
+    return next(new AppError('You already booked this tour!', 403));
   }
-  
-  next()
+
+  next();
 });
 
 exports.createBooking = catchAsync(async (req, res, next) => {

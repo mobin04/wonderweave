@@ -1,0 +1,240 @@
+extends base
+
+block append head
+  link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css")
+  style.
+    .user-reviews {
+      padding: 3rem 0;
+      background-color: #f8f9fa;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    
+    .reviews-heading {
+      font-size: 2.5rem;
+      color: #2d3436;
+      margin-bottom: 2rem;
+      position: relative;
+      padding-bottom: 1rem;
+    }
+    
+    .reviews-heading:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, #ff7e5f, #feb47b);
+      border-radius: 2px;
+    }
+    
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+    
+    .review-card {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .review-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .review-header {
+      background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+      color: white;
+      padding: 1.5rem;
+      position: relative;
+    }
+    
+    .tour-name {
+      font-size: 1.25rem;
+      margin: 0 0 1rem 0;
+      font-weight: 600;
+    }
+    
+    .rating {
+      display: flex;
+      align-items: center;
+    }
+    
+    .star {
+      color: #ffd700;
+      margin-right: 5px;
+      font-size: 1.5rem;
+    }
+    
+    .star-filled:before {
+      content: "★";
+    }
+    
+    .star-empty:before {
+      content: "☆";
+    }
+    
+    .rating-value {
+      margin-left: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 0.25rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+    }
+    
+    .review-date {
+      display: flex;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      font-size: 0.875rem;
+      color: #718096;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .review-date i {
+      margin-right: 0.5rem;
+    }
+    
+    .review-content {
+      padding: 1.5rem;
+      color: #4a5568;
+      line-height: 1.6;
+      font-size: 12px;
+    }
+    
+    .review-actions {
+      display: flex;
+      padding: 0 1.5rem 1.5rem;
+      gap: 0.75rem;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .btn i {
+      margin-right: 0.5rem;
+    }
+    
+    .btn-edit {
+      background-color: #ebf4ff;
+      color: #3182ce;
+    }
+    
+    .btn-edit:hover {
+      background-color: #4299e1;
+      color: white;
+    }
+    
+    .btn-delete {
+      background-color: #fff5f5;
+      color: #e53e3e;
+      font-size: 1.5rem;
+      border-radius: 12px;
+    }
+    
+    .btn-delete:hover {
+      background-color: #f56565;
+      color: white;
+    }
+    
+    .btn-primary {
+      background-color: #4299e1;
+      color: white;
+      padding: 0.75rem 1.5rem;
+    }
+    
+    .btn-primary:hover {
+      background-color: #3182ce;
+    }
+    
+    .no-reviews {
+      text-align: center;
+      padding: 3rem 1rem;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .no-reviews i {
+      font-size: 3rem;
+      color: #cbd5e0;
+      margin-bottom: 1rem;
+    }
+    
+    .no-reviews p {
+      font-size: 1.125rem;
+      color: #718096;
+      margin-bottom: 1.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .reviews-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .reviews-heading {
+        font-size: 2rem;
+      }
+    }
+
+block content
+  section.user-reviews
+    .container
+      h2.reviews-heading My Reviews
+      if reviews && reviews.length > 0
+        .reviews-grid
+          each review in reviews
+            .review-card
+              .review-header
+                h3.tour-name= review.tour.name
+                .rating
+                  - let rating = 1
+                  if review.rating
+                    - rating = Math.max(1, Math.min(5, parseInt(review.rating) || 1))
+                  
+                  - for (let i = 1; i <= 5; i++)
+                    if i <= rating
+                      span.star.star-filled
+                    else
+                      span.star.star-empty
+                  
+                  span.rating-value= rating
+                  
+              .review-date
+                i(class="far fa-calendar-alt")
+                span= review.createdAt ? review.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'No date'
+              
+              .review-content
+                p= review.review
+              
+              .review-actions
+                a.btn.btn-edit(href=`/update-review/${review.tour.id}`) 
+                  i(class="fas fa-edit")
+                  span Edit
+                button.btn.btn-delete(type="button" data-reviewId=review.id) 
+                  i(class="fas fa-trash-alt")
+                  span Delete
+
+      else
+        .no-reviews
+          i(class="far fa-sad-tear")
+          p You haven't written any reviews yet.
+          a.btn.btn-primary(href='/') Browse Tours to Review

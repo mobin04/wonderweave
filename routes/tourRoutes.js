@@ -5,8 +5,6 @@ const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
 
-
-
 // router.param('id', tourController.checkID);
 
 // NESTED ROUTE EG:
@@ -46,6 +44,8 @@ router
   .post(
     authController.protect,
     authController.restrictTo('admin', 'lead-guide'),
+    tourController.uploadTourImages,
+    tourController.resizeTourImages,
     tourController.createTour,
   );
 
@@ -64,5 +64,19 @@ router
     authController.restrictTo('admin', 'lead-guide'),
     tourController.deleteTour,
   );
+
+router.patch(
+  '/:tourId/add-lead-guide',
+  authController.protect,
+  authController.restrictTo('admin', 'lead-guide'),
+  tourController.addLeadGuide,
+);
+
+router.patch(
+  '/:tourId/remove-guide',
+  authController.protect,
+  authController.restrictTo('admin', 'lead-guide'),
+  tourController.removeGuide,
+);
 
 module.exports = router; // use because there is only one thing to export.

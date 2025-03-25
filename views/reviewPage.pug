@@ -14,7 +14,11 @@ block content
       .review-card-stars
         each num in [5, 4, 3, 2, 1]
           +ratingStars(num)
-      textarea.review-card-textarea(name="review" placeholder="Write your review here..." required)
+      if(review)
+        textarea.review-card-textarea(name="review" placeholder="Write your review here..." required)= review.review
+      else
+        textarea.review-card-textarea(name="review" placeholder="Write your review here..." required)
+      
       if(review)
         button.review-card-submit(type="submit" data-reviewId=`${review.id}`) Update Review
       else 

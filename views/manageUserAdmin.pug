@@ -1,0 +1,316 @@
+extends base 
+
+block append head
+  script.
+    document.addEventListener("DOMContentLoaded", function () {
+      const menuItems = document.querySelectorAll(".admin-menu-item");
+      const sections = document.querySelectorAll(".admin-section");
+      const manageGuideButtons = document.querySelectorAll(".admin-btn--primary[href^='#tour-detail-']");
+      const backToToursButtons = document.querySelectorAll(".admin-back-btn");
+      const deleteButtons = document.querySelectorAll(".delete-btn");
+
+      // Modal Elements
+      const modal = document.getElementById("delete-modal");
+      const modalOverlay = document.querySelector(".modal-overlay");
+      const confirmDeleteBtn = document.getElementById("confirm-delete");
+      const cancelDeleteBtn = document.getElementById("cancel-delete");
+
+      let deleteUrl = ""; // Store delete URL
+
+      function showSection(sectionId) {
+        sections.forEach((section) => (section.style.display = "none"));
+        menuItems.forEach((menu) => menu.classList.remove("admin-menu-item--active"));
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) targetSection.style.display = "block";
+      }
+
+      // Sidebar navigation click handling
+      menuItems.forEach((item) => {
+        item.addEventListener("click", function (event) {
+          event.preventDefault();
+          showSection(this.getAttribute("href").substring(1));
+          this.classList.add("admin-menu-item--active");
+        });
+      });
+
+      // Handle "Manage Guides" button clicks
+      manageGuideButtons.forEach((button) => {
+        button.addEventListener("click", function (event) {
+          event.preventDefault();
+          showSection(this.getAttribute("href").substring(1));
+        });
+      });
+
+      // Handle "Back to Tours" button clicks
+      backToToursButtons.forEach((button) => {
+        button.addEventListener("click", function (event) {
+          event.preventDefault();
+          showSection("tours");
+        });
+      });
+
+      // Handle delete button clicks with modal
+      deleteButtons.forEach((button) => {
+        button.addEventListener("click", function (event) {
+          event.preventDefault();
+          deleteUrl = this.getAttribute('data-userId');
+          confirmDeleteBtn.setAttribute('data-userId', deleteUrl)
+          modal.classList.remove("hidden");
+          modalOverlay.style.display = "block"; // Show overlay
+        });
+      });
+
+      // Cancel delete
+      cancelDeleteBtn.addEventListener("click", function () {
+        modal.classList.add("hidden");
+        modalOverlay.style.display = "none"; // Hide overlay
+      });
+
+      // Show the dashboard section by default
+      document.getElementById("dashboard").style.display = "block";
+    });
+
+
+    
+
+block content
+  .admin-dashboard
+    .admin-sidebar
+      .admin-logo
+        h2.admin-logo-text Admin Panel
+      
+      .admin-menu
+        .admin-menu-title Menu
+        
+        a.admin-menu-item(href="#dashboard" class="admin-menu-item--active")
+          .admin-menu-icon 📊
+          span Dashboard
+        
+        a.admin-menu-item(href="#tours")
+          .admin-menu-icon 🏞️
+          span Tours
+        
+        a.admin-menu-item(href="#guides")
+          .admin-menu-icon 🧑🏻‍🤝‍🧑🏻
+          span Guides
+        
+        a.admin-menu-item(href="#users")
+          .admin-menu-icon 🙎
+          span Users
+    
+    .admin-content
+      //- Dashboard Section
+      section.admin-section.admin-dashboard-section#dashboard
+        .admin-section-header
+          h1.admin-section-title Dashboard
+          
+        .admin-stats-grid
+          .admin-stat-card
+            .admin-stat-number= `${tours.length}`
+            .admin-stat-title Tours
+            
+          - const guideCount = users.filter(user => user.role === 'guide').length;
+          .admin-stat-card
+            .admin-stat-number= `${guideCount}`
+            .admin-stat-title Guides
+            
+          - const leadGuidesCount = users.filter(user => user.role === 'lead-guide').length;
+          .admin-stat-card
+            .admin-stat-number= `${leadGuidesCount}`
+            .admin-stat-title Lead Guides
+          
+          .admin-stat-card
+            .admin-stat-number= `${users.length}`
+            .admin-stat-title Users
+        
+        .admin-recent-section
+          h2.admin-recent-title Recent Activities
+          .admin-recent-activities
+            .admin-activity
+              .admin-activity-icon ✅
+              .admin-activity-details
+                .admin-activity-title New guide assigned to Wilderness Trek
+                .admin-activity-time 2 hours ago
+            
+            .admin-activity
+              .admin-activity-icon ✅
+              .admin-activity-details
+                .admin-activity-title User John Doe deleted
+                .admin-activity-time 5 hours ago
+            
+            .admin-activity
+              .admin-activity-icon ✅
+              .admin-activity-details
+                .admin-activity-title New lead guide for Mountain Expedition
+                .admin-activity-time 1 day ago
+      
+      //- Tours Section
+      section.admin-section.admin-tours-section#tours(style="display: none;")
+        .admin-section-header
+          h1.admin-section-title Tours Management
+        
+        .admin-tours-grid
+          each tour in tours
+            .admin-tour-card
+              .admin-tour-name= tour.name
+              .admin-tour-stats
+              each guide in tour.guides
+                if (guide.role === 'guide')
+                  .admin-tour-guides= `Name:${guide.name} | 📧:${guide.email} (Guides)`
+                if (guide.role === 'lead-guide')
+                  .admin-tour-lead-guides= `Name:${guide.name} | 📧:${guide.email} (Lead Guide)`
+              .admin-tour-actions
+                a.admin-btn.admin-btn--primary(href=`#tour-detail-${tour.id}`) Manage Guides
+      
+      //- Tour Detail Section (shown when a tour is clicked)
+      each tour in tours
+        section.admin-section.admin-tour-detail-section(id=`tour-detail-${tour.id}` style="display: none;")
+          .admin-section-header
+            a.admin-back-btn(href="#tours") ← Back to Tours
+            h1.admin-section-title.tour-header(data-tourId=`${tour.id}`)= `${tour.name} - Guide Management`
+          .admin-tour-guides-container
+            .admin-tour-guides-lead
+              h2.admin-tour-guides-title Lead Guide
+              each guide in tour.guides
+                if (guide.role === 'lead-guide')
+                  .admin-tour-guide-list
+                    .admin-tour-guide-card
+                      .admin-tour-guide-avatar
+                        img.admin-tour-guide-img(src=`/img/users/${guide.photo}` alt="Guide Avatar")
+                      .admin-tour-guide-details
+                        .admin-tour-guide-name= `${guide.name}`
+                        .admin-tour-guide-email= `${guide.email}`
+                      .admin-tour-guide-actions
+                        button.admin-btn.admin-btn--danger.lead-guide-remove-btn(data-guideId=`${guide.id}`) Remove
+            
+              .admin-tour-guide-add
+                h3.admin-tour-guide-add-title Add Lead Guide
+                .admin-tour-guide-form
+                  select.admin-tour-guide-select.select-lead-guide
+                    each user in users
+                      if (user.role === 'lead-guide')
+                         option(value=`${user.id}`)= `${user.name}`
+                  button.admin-btn.admin-btn--primary.add-lead-guide-btn Add Lead Guide
+            
+            .admin-tour-guides-regular
+              h2.admin-tour-guides-title Guides
+              .admin-tour-guide-list
+                each guide in tour.guides
+                  if (guide.role === 'guide')
+                    .admin-tour-guide-card
+                      .admin-tour-guide-avatar
+                        img.admin-tour-guide-img(src=`/img/users/${guide.photo}` alt="Guide Avatar")
+                      .admin-tour-guide-details
+                        .admin-tour-guide-name= guide.name
+                        .admin-tour-guide-email= guide.email
+                      .admin-tour-guide-actions
+                        button.admin-btn.admin-btn--danger.guide-remove-btn(data-guideId=`${guide.id}`) Remove
+              
+              .admin-tour-guide-add
+                h3.admin-tour-guide-add-title Add Guide
+                .admin-tour-guide-form
+                  select.admin-tour-guide-select.select-guide
+                    each user in users
+                      if (user.role === 'guide')
+                        option(value=`${user.id}`)= `${user.name}`
+                  button.admin-btn.admin-btn--primary.add-guide-btn Add Guide
+      
+      //- Guides Section
+      section.admin-section.admin-guides-section#guides(style="display: none;")
+        .admin-section-header
+          h1.admin-section-title All Guides
+        
+        .admin-guides-container
+          h2.admin-guides-subtitle Lead Guides
+            .admin-guides-grid
+              each guide in guides
+                if (guide.role === 'lead-guide')
+                  .admin-guide-card
+                    .admin-guide-avatar
+                      img.admin-guide-img(src=guide.photo ? `/img/users/${guide.photo}` : "/img/default-avatar.png" alt="Guide Avatar")
+                    .admin-guide-details
+                      .admin-guide-name= guide.name
+                      .admin-guide-email= guide.email
+                      .admin-guide-tours
+                        span.admin-guide-tours-label Tours:
+                        span.admin-guide-tours-list= guide.tours.join(', ')
+
+          
+          h2.admin-guides-subtitle Regular Guides
+          .admin-guides-grid
+             each guide in guides
+                if (guide.role === 'guide')
+                  .admin-guide-card
+                    .admin-guide-avatar
+                      img.admin-guide-img(src=guide.photo ? `/img/users/${guide.photo}` : "/img/default-avatar.png" alt="Guide Avatar")
+                    .admin-guide-details
+                      .admin-guide-name= guide.name
+                      .admin-guide-email= guide.email
+                      .admin-guide-tours
+                        span.admin-guide-tours-label Tours:
+                        span.admin-guide-tours-list= guide.tours.join(', ')
+
+      
+      //- Users Section
+      section.admin-section.admin-users-section#users(style="display: none;")
+        .admin-section-header
+          h1.admin-section-title Users Management
+        
+        .admin-users-search
+          input#searchInput.admin-users-search-input(type="text" placeholder="Search users...")
+          button.admin-btn.admin-btn--primary(onclick="searchUsers()") Search
+          
+        .admin-users-table-container
+          table.admin-users-table
+            thead.admin-users-table-header
+              tr.admin-users-table-row
+                th.admin-users-table-cell Name
+                th.admin-users-table-cell Email
+                th.admin-users-table-cell Role
+                th.admin-users-table-cell Status
+                th.admin-users-table-cell Actions
+                th.admin-users-table-cell Change role
+                th.admin-users-table-cell Actions
+            
+            tbody#userTable.admin-users-table-body
+              each user in users
+                -const status = user.active === true ? 'active' : 'inactive'
+                tr.admin-users-table-row
+                  td.admin-users-table-cell= user.name
+                  td.admin-users-table-cell= user.email
+                  td.admin-users-table-cell
+                    span(class=`admin-users-role admin-users-role--${user.role}`)= user.role
+                  td.admin-users-table-cell
+                    span(class=`admin-users-status admin-users-status--${status}`)= status
+                  td.admin-users-table-cell
+                    button.admin-btn.admin-btn--danger.delete-btn(data-userId=`${user.id}`) Delete
+                  td.admin-users-table-cell
+                    select.admin-tour-guide-select.admin-user-role-select
+                      if (user.role === 'user')
+                        option(value='guide') set guide
+                        option(value='lead-guide') set lead guide
+                        option(value='admin') set admin
+                      if (user.role === 'guide')
+                        option(value='lead-guide') set lead guide
+                        option(value='user') set user
+                        option(value='admin') set admin
+                      if (user.role === 'lead-guide')
+                        option(value='guide') set guide
+                        option(value='user') set user
+                        option(value='admin') set admin
+                      if (user.role === 'admin')
+                        option(value='user') set user
+                      
+                  td.admin-users-table-cell  
+                    button.admin-btn.admin-update-btn(data-userId=`${user.id}`) Update
+
+                      
+      //- Delete Confirmation Modal
+      #delete-modal.hidden
+        .modal-overlay
+        .modal-box
+          h2 Are you sure you want to delete this user?
+          p ⚠️This action cannot be undone!
+          .modal-actions
+            button#confirm-delete.btn.btn-danger Yes, Delete
+            button#cancel-delete.btn.btn-secondary Cancel

@@ -1,0 +1,34 @@
+extends base
+
+block content
+  .tour-admin-container
+    h1.tour-admin-title Tour Management
+    
+    .tour-admin-actions
+      a.tour-admin-btn.tour-admin-btn--create(href='/create-tour') Create New Tour
+    
+    //- Tours List View
+    #toursList.tour-admin-list
+      table.tour-admin-table
+        thead
+          tr
+            th Tour Name
+            th Duration
+            th Difficulty
+            th Price
+            th Rating
+            th Next Date
+            th Actions
+        tbody
+          each tour in tours
+            tr
+              td= tour.name
+              td #{tour.duration} days
+              td.tour-admin-difficulty(class=`tour-admin-difficulty--${tour.difficulty}`)= tour.difficulty
+              td $#{tour.price}
+              td #{tour.ratingsAverage} (#{tour.ratingsQuantity})
+              td= tour.dates && tour.dates.length > 0 ? new Date(tour.dates[0].date).toLocaleDateString() : 'No dates'
+              td.tour-admin-actions-cell
+                a.tour-admin-btn.tour-admin-btn--edit(href=`/edit-tour/${tour.id}`) Edit
+                a.tour-admin-btn.tour-admin-btn--delete.admin-tour-delete-btn(data-tourId=`${tour.id}`) Delete
+    

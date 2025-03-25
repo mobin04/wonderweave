@@ -66,7 +66,7 @@ app.use(
           'https://api.stripe.com', // ✅ Allow Stripe iframe
           'https://applepay.cdn-apple.com',
         ],
-        imgSrc: ["'self'", 'data:', 'blob:', 'https://*.mapbox.com'],
+        imgSrc: ["'self'", 'data:', 'blob:', 'https://*.mapbox.com', 'https://natours.dev'],
         styleSrc: [
           "'self'",
           "'unsafe-inline'",
@@ -74,8 +74,13 @@ app.use(
           'https://fonts.googleapis.com',
           'https://www.gstatic.com',
           'https://applepay.cdn-apple.com',
+          'https://cdnjs.cloudflare.com',
         ],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+        fontSrc: [
+          "'self'",
+          'https://fonts.gstatic.com',
+          'https://cdnjs.cloudflare.com',
+        ],
       },
     },
   }),
