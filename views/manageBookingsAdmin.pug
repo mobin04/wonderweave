@@ -1,0 +1,65 @@
+extends base
+
+block append head 
+  style. 
+
+block content
+  .bookings-management
+      .bookings-management__header
+          h1.bookings-management__title Booking Management
+          
+      if bookings && bookings.length > 0
+          .bookings-management__list
+              each booking in bookings
+                  .bookings-management__item(data-booking-id=booking._id)
+                      .bookings-management__item-header
+                          h2.bookings-management__tour-name= booking.tour.name
+                          span.bookings-management__date= `📆 ${new Date(booking.selectedDate).toLocaleDateString()}`
+                      
+                      .bookings-management__details
+                          .bookings-management__user-info
+                              .bookings-management__user-avatar
+                                  img(
+                                      src=`/img/users/${booking.user.photo}` 
+                                      alt=`${booking.user.name}'s profile`
+                                      class='bookings-management__user-image'
+                                  )
+                              .bookings-management__user-meta
+                                  p.bookings-management__user-name= booking.user.name
+                                  p.bookings-management__user-email= booking.user.email
+                          
+                          .bookings-management__tour-details
+                              .bookings-management__guides
+                                  h3.bookings-management__guides-title Tour Guides
+                                  each guide in booking.tour.guides
+                                      .bookings-management__guide
+                                          img(
+                                              src=`/img/users/${guide.photo}` 
+                                              alt=`${guide.name}'s profile`
+                                              class='bookings-management__guide-image'
+                                          )
+                                          .bookings-management__guide-info
+                                              p.bookings-management__guide-name= guide.name
+                                              p.bookings-management__guide-role= guide.role
+                          
+                          .bookings-management__financial-info
+                              .bookings-management__price
+                                  span.bookings-management__price-label Price:
+                                  span.bookings-management__price-value $#{booking.price}
+                              .bookings-management__status
+                                  span.bookings-management__status-label Paid:
+                                  span.bookings-management__status-value= booking.paid ? 'Yes' : 'No'
+                              
+                      .bookings-management__actions
+                          form
+                              a(
+                                  type='submit' 
+                                  class='bookings-management__delete-button'
+                                  data-bookingId=`${booking.id}`
+                              ) 
+                                  | Delete Booking
+                                  svg.bookings-management__delete-icon(xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24')
+                                      path(d='M3 6h18v2H3V6zm3 2v13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8h2v13a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8h2zm5-4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H8V4zm7 2H9V3h6v3z')
+      else
+          .bookings-management__empty
+              p.bookings-management__empty-message No bookings found.

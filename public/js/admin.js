@@ -5,7 +5,7 @@ import { manageReview } from './manageReview';
 import { deleteReview } from './manageReview';
 import { manageTour } from './manageTour';
 import {
-  deleteUserOrReview,
+  deleteSetting,
   addGuide,
   updateRole,
   removeGuide,
@@ -317,7 +317,7 @@ export const deleteFunc = (deleteButton, type) => {
     if (!id) {
       return alert(`No ${type} id found!`);
     }
-    await deleteUserOrReview(id, type);
+    await deleteSetting(id, type);
   });
 };
 

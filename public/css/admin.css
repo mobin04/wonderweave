@@ -2,8 +2,7 @@
 /* Tour Management Admin Styles */
 
 .tour-admin-container {
-  max-width: 1200px;
-  width: 1000px;
+  width: 100%;
   margin: 2rem auto;
   padding: 0 1.5rem;
   font-family: 'Lato', sans-serif;
@@ -107,7 +106,7 @@
 }
 
 .tour-admin-btn--back {
-  background-color: #34495e;
+  background-color: #345e3f;
   color: #fff;
 }
 
@@ -157,7 +156,7 @@
 }
 
 .tour-admin-table th {
-  background-color: #34495e;
+  background-color: #00a838;
   color: #fff;
   font-weight: 600;
   font-size: 17px;
@@ -980,8 +979,7 @@ a {
 }
  /************************ MANAGE-REVIEWS *********************************/
  .admin-reviews-container {
-  width: calc(100% - 6rem); /* Subtract body's 3rem padding on both sides */
-  max-width: 1200px; /* Keep the same max-width */
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   font-family: 'Poppins', sans-serif;
@@ -1234,5 +1232,218 @@ a {
   
   .admin-reviews-search-button {
     width: 100%;
+  }
+}
+
+/*********************** Manage-Bookings *******************************/
+.bookings-management {
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f4f6f9;
+}
+
+.bookings-management__header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.bookings-management__title {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.bookings-management__list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.bookings-management__item {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.bookings-management__item:hover {
+  transform: translateY(-5px);
+}
+
+.bookings-management__item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color:rgba(12, 143, 25, 0.98);
+  backdrop-filter: blur(5px);
+  color: white;
+  padding: 1rem 1.5rem;
+}
+
+.bookings-management__tour-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.bookings-management__date {
+  font-weight: 500;
+}
+
+.bookings-management__details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.bookings-management__user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bookings-management__user-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.bookings-management__user-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bookings-management__user-meta {
+  color: #2c3e50;
+}
+
+.bookings-management__user-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.bookings-management__user-email {
+  color: #7f8c8d;
+}
+
+.bookings-management__tour-details {
+  background-color: #f1f4f8;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.bookings-management__guides-title {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.bookings-management__guide {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.bookings-management__guide-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.bookings-management__guide-info {
+  flex-grow: 1;
+}
+
+.bookings-management__guide-name {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.bookings-management__guide-role {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.bookings-management__financial-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.bookings-management__price,
+.bookings-management__status {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border-radius: 4px;
+  background-color: #ecf0f1;
+}
+
+.bookings-management__price-label,
+.bookings-management__status-label {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.bookings-management__price-value,
+.bookings-management__status-value {
+  font-weight: 600;
+  color: rgb(0, 164, 0);
+}
+
+.bookings-management__actions {
+  padding: 1rem 1.5rem;
+  background-color: #f4f6f9;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bookings-management__delete-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bookings-management__delete-button:hover {
+  background-color: #c0392b;
+}
+
+.bookings-management__delete-icon {
+  width: 20px;
+  height: 20px;
+  fill: white;
+}
+
+.bookings-management__empty {
+  text-align: center;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bookings-management__empty-message {
+  color: #7f8c8d;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .bookings-management__details {
+      grid-template-columns: 1fr;
   }
 }

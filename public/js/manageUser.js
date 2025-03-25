@@ -2,22 +2,23 @@
 import axios from 'axios';
 import { showAlert } from './alerts';
 
-export const deleteUserOrReview = async (id, type) => {
+export const deleteSetting = async (id, type) => {
   try {
     let url;
     let redirect;
-  
-    if (type === 'user'){
+
+    if (type === 'user') {
       url = `http://127.0.0.1:8000/api/v1/users/${id}`;
-      redirect = location.assign('/manage-users');
-      
-    }else if (type === 'review'){
+      redirect = '/manage-users';
+    } else if (type === 'review') {
       url = `http://127.0.0.1:8000/api/v1/reviews/${id}`;
-      redirect = location.assign('/manage-reviews');
-      
-    }else if (type === 'tour'){
+      redirect = '/manage-reviews';
+    } else if (type === 'tour') {
       url = `http://127.0.0.1:8000/api/v1/tours/${id}`;
-      redirect = location.assign('/manage-tours')
+      redirect = '/manage-tours';
+    } else if (type === 'booking') {
+      url = `http://127.0.0.1:8000/api/v1/bookings/${id}`;
+      redirect = '/manage-bookings';
     }
 
     const res = await axios({
@@ -25,12 +26,12 @@ export const deleteUserOrReview = async (id, type) => {
       url,
     });
 
+    console.log(res);
+
     showAlert('success', `Delete ${type} successfully!`);
     window.setTimeout(() => {
-      type === 'user'
-        redirect;
+      location.assign(redirect)
     }, 1500);
-    
   } catch (err) {
     showAlert('error', err.response.data.message);
   }

@@ -49,6 +49,7 @@ const leadGuideRemoveBtn = document.querySelectorAll('.lead-guide-remove-btn');
 const guideRemoveBtn = document.querySelectorAll('.guide-remove-btn');
 const reviewSearchInp = document.querySelector('.admin-reviews-search-input');
 const deleteBtnReview = document.getElementById('confirm-delete-review');
+const deleteBookingsBtn = document.querySelectorAll('.bookings-management__delete-button');
 
 // MAP BOX
 if (mapBox) {
@@ -184,3 +185,10 @@ if (guideRemoveBtn) removeGuideFunc(guideRemoveBtn);
 
 // REVIEW-SEARCH-FUNCTIONALITY
 if (reviewSearchInp) reviewSearchFunc(reviewSearchInp);
+
+// DELETE BOOKINGS 
+if(deleteBookingsBtn){
+  deleteBookingsBtn.forEach((btn) => {
+    deleteFunc(btn, 'booking')
+  })
+}

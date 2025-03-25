@@ -96,7 +96,7 @@ exports.emailVerificationPage = async (req, res, next) => {
 
 exports.bookNow = async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
-  
+
   res.status(200).render('bookingPage', {
     title: 'Book your tour',
     tour,
@@ -152,37 +152,37 @@ exports.getTours = async (req, res, next) => {
 exports.createTour = (req, res, next) => {
   res.status(200).render('createTourForm', {
     title: 'Create Tour',
-  })
-}
+  });
+};
 
 exports.editTour = async (req, res, next) => {
-  const {tourId} = req.params
+  const { tourId } = req.params;
   const tour = await Tour.findById(tourId);
-  
+
   res.status(200).render('createTourForm', {
     title: 'Edit Tour',
-    tour
-  })
-}
+    tour,
+  });
+};
 
 exports.manageUsers = async (req, res, next) => {
   try {
     // Fetch tours with guide details populated
-    const tours = await Tour.find().populate('guides'); 
+    const tours = await Tour.find().populate('guides');
     const users = await User.find().select('+active');
 
     // Create a map of guides and their tours
     const guidesMap = {};
-    
+
     tours.forEach((tour) => {
       tour.guides.forEach((guide) => {
         if (!guidesMap[guide.email]) {
-          guidesMap[guide.email] = { 
-            name: guide.name, 
-            email: guide.email, 
-            photo: guide.photo, 
-            role: guide.role, 
-            tours: [] 
+          guidesMap[guide.email] = {
+            name: guide.name,
+            email: guide.email,
+            photo: guide.photo,
+            role: guide.role,
+            tours: [],
           };
         }
         guidesMap[guide.email].tours.push(tour.name);
@@ -197,25 +197,34 @@ exports.manageUsers = async (req, res, next) => {
       title: 'Manage Users',
       tours,
       users,
-      guides: guidesArray
+      guides: guidesArray,
     });
-
   } catch (error) {
     res.status(500).json({ message: 'Error fetching data', error });
   }
 };
 
-exports.adminManageReview = async(req, res, next) => {
+exports.adminManageReview = async (req, res, next) => {
   const reviews = await Review.find().populate({
     path: 'tour',
-  })
-  
-  res.status(200).render('manageReviewAdmin', { 
-    title: 'Manage Reviews',
-    reviews
   });
-}
 
+  res.status(200).render('manageReviewAdmin', {
+    title: 'Manage Reviews',
+    reviews,
+  });
+};
+
+exports.manageBookings = async (req, res, next) => {
+  const bookings = await Booking.find()
+  .populate('user')  // Populate the 'user' field
+  .populate('tour');  // Populate the 'tour' field
+
+  res.status(200).render('manageBookingsAdmin', {
+    title: 'Manage Bookings',
+    bookings,
+  });
+};
 
 // exports.updateUserData = (req, res) => {
 //   // req.data is come from URL-ENCODED from account.pug
