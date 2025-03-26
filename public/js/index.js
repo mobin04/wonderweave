@@ -125,7 +125,7 @@ if (resendButton) {
 
     const email = resendButton.getAttribute('data-email'); // Get email from data attribute
     if (!email) {
-      console.error('Email not found in dataset!');
+      // console.error('Email not found in dataset!');
       return;
     }
 

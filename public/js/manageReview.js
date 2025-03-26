@@ -9,8 +9,8 @@ export const manageReview = async (type, reviewId, tourId, rating, review) => {
 
     const url =
       type === 'add-review'
-        ? `http://127.0.0.1:8000/api/v1/tours/${tourId}/reviews`
-        : `http://127.0.0.1:8000/api/v1/reviews/${reviewId}`;
+        ? `/api/v1/tours/${tourId}/reviews`
+        : `/api/v1/reviews/${reviewId}`;
 
     const res = await axios({
       method,
@@ -41,7 +41,7 @@ export const deleteReview = async (reviewId) => {
   try {
     const res = await axios({
       method: 'DELETE',
-      url: `http://127.0.0.1:8000/api/v1/reviews/${reviewId}`,
+      url: `/api/v1/reviews/${reviewId}`,
     });
 
     showAlert('success', 'Review deleted successfully!');

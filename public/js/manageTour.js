@@ -8,10 +8,10 @@ export const manageTour = async (data, type, tourId) => {
     let url;
     if(type === 'create'){
       method = 'POST'
-      url = 'http://127.0.0.1:8000/api/v1/tours'
+      url = '/api/v1/tours'
     }else if(type === 'edit'){
       method = 'PATCH',
-      url = `http://127.0.0.1:8000/api/v1/tours/${tourId}}`
+      url = `/api/v1/tours/${tourId}}`
     }
 
     const res = await axios({
@@ -27,7 +27,6 @@ export const manageTour = async (data, type, tourId) => {
       }, 1200);
     }
   } catch (err) {
-    console.log(err);
     showAlert('error', err.response.data.message);
   }
 };

@@ -6,7 +6,7 @@ dotenv.config({ path: './config.env' });
 //HANDLING UNCOUGHT EXCEPTION(need to set it first)
 process.on('uncaughtException', (err) => {
   console.log('UNCOUGHT EXCEPTION 😮 Shutting down...');
-  console.log(err.name, err);
+  // console.log(err.name, err);
   process.exit(1);
 });
 

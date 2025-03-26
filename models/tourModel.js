@@ -202,10 +202,10 @@ tourSchema.pre(/^find/, function (next) {
 });
 
 //POST()
-tourSchema.post(/^find/, function (docs, next) {
-  console.log(`Query took ${Date.now() - this.start} milliseconds`);
-  next();
-});
+// tourSchema.post(/^find/, function (docs, next) {
+//   console.log(`Query took ${Date.now() - this.start} milliseconds`);
+//   next();
+// });
 
 // 3) AGGREGATION MIDDLEWARE
 // tourSchema.pre('aggregate', function (next) {

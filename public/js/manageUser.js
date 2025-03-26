@@ -8,16 +8,16 @@ export const deleteSetting = async (id, type) => {
     let redirect;
 
     if (type === 'user') {
-      url = `http://127.0.0.1:8000/api/v1/users/${id}`;
+      url = `/api/v1/users/${id}`;
       redirect = '/manage-users';
     } else if (type === 'review') {
-      url = `http://127.0.0.1:8000/api/v1/reviews/${id}`;
+      url = `/api/v1/reviews/${id}`;
       redirect = '/manage-reviews';
     } else if (type === 'tour') {
-      url = `http://127.0.0.1:8000/api/v1/tours/${id}`;
+      url = `/api/v1/tours/${id}`;
       redirect = '/manage-tours';
     } else if (type === 'booking') {
-      url = `http://127.0.0.1:8000/api/v1/bookings/${id}`;
+      url = `/api/v1/bookings/${id}`;
       redirect = '/manage-bookings';
     }
 
@@ -26,7 +26,6 @@ export const deleteSetting = async (id, type) => {
       url,
     });
 
-    console.log(res);
 
     showAlert('success', `Delete ${type} successfully!`);
     window.setTimeout(() => {
@@ -41,7 +40,7 @@ export const updateRole = async (userId, role) => {
   try {
     const res = await axios({
       method: 'PATCH',
-      url: `http://127.0.0.1:8000/api/v1/users/${userId}`,
+      url: `/api/v1/users/${userId}`,
       data: {
         role,
       },
@@ -54,7 +53,7 @@ export const updateRole = async (userId, role) => {
       }, 1500);
     }
   } catch (err) {
-    console.log(err);
+    showAlert('error', err.response.data.message)
   }
 };
 
@@ -62,7 +61,7 @@ export const addGuide = async (tourId, guideId) => {
   try {
     const res = await axios({
       method: 'PATCH',
-      url: `http://127.0.0.1:8000/api/v1/tours/${tourId}/add-lead-guide`,
+      url: `/api/v1/tours/${tourId}/add-lead-guide`,
       data: {
         guideId,
       },
@@ -83,7 +82,7 @@ export const removeGuide = async (tourId, guideId) => {
   try {
     const res = await axios({
       method: 'PATCH',
-      url: `http://127.0.0.1:8000/api/v1/tours/${tourId}/remove-guide`,
+      url: `/api/v1/tours/${tourId}/remove-guide`,
       data: {
         guideId,
       },

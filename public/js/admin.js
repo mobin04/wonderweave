@@ -279,7 +279,7 @@ export const createTourFunc = (saveTourBtn, type) => {
     // Append dates as JSON (FormData does not support arrays directly)
     form.append('locations', JSON.stringify(locations));
 
-    console.log([...form.entries()]);
+    // console.log([...form.entries()]);
 
     await manageTour(form, type, tourId);
   });
@@ -365,7 +365,7 @@ export const addGuideFunc = (btns, type) => {
       }
 
       const guideId = selectLeadGuide.value;
-      console.log(`guide ID:${guideId} | tour ID: ${tourId}`);
+      // console.log(`guide ID:${guideId} | tour ID: ${tourId}`);
 
       await addGuide(tourId, guideId);
     });
@@ -385,7 +385,7 @@ export const removeGuideFunc = (removeBtn) => {
         .querySelector('.tour-header')
         .getAttribute('data-tourId');
 
-      console.log(`GUIDE ID::${guideId} | TOUR ID::${tourId}`);
+      // console.log(`GUIDE ID::${guideId} | TOUR ID::${tourId}`);
 
       await removeGuide(tourId, guideId);
     });

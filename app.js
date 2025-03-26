@@ -8,6 +8,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -66,7 +67,13 @@ app.use(
           'https://api.stripe.com', // ✅ Allow Stripe iframe
           'https://applepay.cdn-apple.com',
         ],
-        imgSrc: ["'self'", 'data:', 'blob:', 'https://*.mapbox.com', 'https://natours.dev'],
+        imgSrc: [
+          "'self'",
+          'data:',
+          'blob:',
+          'https://*.mapbox.com',
+          'https://natours.dev',
+        ],
         styleSrc: [
           "'self'",
           "'unsafe-inline'",
@@ -131,8 +138,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// 3) ROUTES
+app.use(compression());
 
+// 3) ROUTES
 // Define route handlers for different parts of the app
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
