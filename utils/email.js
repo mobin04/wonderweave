@@ -10,7 +10,7 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0]; // Extract first name from full name
     this.url = url; // URL (e.g., for password reset, confirmation, etc.)
-    this.from = `Wonderweave <${process.env.EMAIL_FROM}>`;
+    this.from = `Wonderweave <${process.env.EMAIL_FROM_ME}>`;
   }
 
   newTransport() {
