@@ -5,60 +5,102 @@ const bookingController = require('../controllers/bookingController');
 
 const router = express.Router();
 
-router.get(
-  '/',
-  authController.isUserLoggedIn,
-  viewsController.getOverview,
+// Public Routes (No Authentication Required)
+router.get('/', 
+  // bookingController.createBookingCheckout, // Commented out as per original code
+  authController.isUserLoggedIn, 
+  viewsController.getOverview
 );
 
-router.get(
-  '/login',
-  authController.isUserLoggedIn,
-  viewsController.getLoginForm,
+router.get('/login', 
+  authController.isUserLoggedIn, 
+  viewsController.getLoginForm
 );
 
 router.get('/signup', viewsController.getSignUpForm);
 router.get('/email-verify/:id', viewsController.emailVerificationPage);
 
-router.get(
-  '/tour/:slug',
+// Authentication Required Routes
+router.get('/me', 
+  authController.protect, 
+  viewsController.getAccount
+);
+
+// Tour-Related Routes
+router.get('/tour/:slug', 
   authController.isUserLoggedIn,
+  authController.protect, 
+  viewsController.getTour
+);
+
+router.get('/my-tours', 
+  authController.protect, 
+  viewsController.getMyTours
+);
+
+// Booking-Related Routes
+router.get('/book-now/:id', 
   authController.protect,
-  viewsController.getTour,
+  bookingController.isBooked, 
+  viewsController.bookNow
 );
 
-router.use(authController.protect);
-
-router.get(
-  '/book-now/:id',
-  bookingController.isBooked,
-  viewsController.bookNow,
-);
-router.get('/success-booking', viewsController.successBooking);
-router.get('/add-review/:tourId', viewsController.manageReview);
-router.get('/update-review/:tourId', viewsController.manageReview);
-router.get('/get-my-reviews', viewsController.getReviews);
-router.get('/me', viewsController.getAccount);
-router.get('/my-tours', viewsController.getMyTours);
-
-router.get(
-  '/manage-users',
-  authController.restrictTo('admin'),
-  viewsController.manageUsers,
+router.get('/success-booking', 
+  authController.protect, 
+  viewsController.successBooking
 );
 
-router.use(authController.restrictTo('admin', 'lead-guide'));
+// Review-Related Routes
+router.get('/add-review/:tourId', 
+  authController.protect, 
+  viewsController.manageReview
+);
 
-router.get('/manage-tours', viewsController.getTours);
-router.get('/create-tour', viewsController.createTour);
-router.get('/edit-tour/:tourId', viewsController.editTour);
-router.get('/manage-reviews', viewsController.adminManageReview);
-router.get('/manage-bookings', viewsController.manageBookings);
+router.get('/update-review/:tourId', 
+  authController.protect, 
+  viewsController.manageReview
+);
 
-// router.post( // This for URL-Encoded route
-//   '/submit-user-data',
+router.get('/get-my-reviews', 
+  authController.protect, 
+  viewsController.getReviews
+);
+
+// Admin and Lead Guide Routes
+router.get('/manage-tours', 
+  authController.protect, 
+  authController.restrictTo('admin'), 
+  viewsController.getTours
+);
+
+router.get('/create-tour', 
+  authController.protect, 
+  authController.restrictTo('admin', 'lead-guide'), 
+  viewsController.createTour
+);
+
+router.get('/edit-tour/:tourId', 
+  authController.protect, 
+  authController.restrictTo('admin', 'lead-guide'), 
+  viewsController.editTour
+);
+
+router.get('/manage-users', 
+  authController.protect, 
+  authController.restrictTo('admin'), 
+  viewsController.manageUsers
+);
+
+router.get('/manage-reviews', 
+  authController.protect, 
+  authController.restrictTo('admin', 'lead-guide'), 
+  viewsController.adminManageReview
+);
+
+// Commented out URL-Encoded route as per original code
+// router.post('/submit-user-data', 
 //   authController.protect,
-//   viewsController.updateUserData,
+//   viewsController.updateUserData
 // );
 
 module.exports = router;
