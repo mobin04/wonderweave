@@ -97,6 +97,12 @@ router.get('/manage-reviews',
   viewsController.adminManageReview
 );
 
+router.get('/manage-bookings', 
+  authController.protect,
+  authController.restrictTo('admin', 'lead-guide'),
+  viewsController.manageBookings
+)
+
 // Commented out URL-Encoded route as per original code
 // router.post('/submit-user-data', 
 //   authController.protect,
