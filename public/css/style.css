@@ -374,15 +374,15 @@ body {
   z-index: -1;
 }
 
-@media only screen and (max-width: 62.5em) {
+/* @media only screen and (max-width: 62.5em) {
   .header {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
   }
-}
-.header__logo img {
+} */
+/* .header__logo img {
   height: 8.5rem;
 }
 @media only screen and (max-width: 62.5em) {
@@ -392,7 +392,7 @@ body {
     order: -1;
     margin-bottom: 1.5rem;
   }
-}
+} */
 
 .section-header {
   position: relative;
