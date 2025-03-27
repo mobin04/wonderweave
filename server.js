@@ -40,3 +40,11 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
   });
 });
+
+// SIGTERM SIGNAL FOR RENDER
+process.on('SIGTERM', () => {
+  console.log('🙂SIGTERM RECEIVED. Shutting down gracefully');
+  server.close(() => { // finishes all pending requests
+    console.log('💥Process terminated');
+  });
+});
