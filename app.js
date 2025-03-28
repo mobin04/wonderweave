@@ -9,6 +9,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -27,6 +28,16 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // 1) GLOBAL MIDDLEWARES
+// IMPLEMENT CORS
+app.use(cors());
+// Access-Control-Allow-Orgin *
+//api.wonderweave.com, front-end wonderweave.com
+// app.use(cors({
+//   orgin: 'https://www.wonderweave.com'
+// }))
+
+app.options('*', cors());
+// app.options('/api/v1/tour/:id', cors());
 
 // Serve static files (CSS, JS, images, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
@@ -68,7 +79,7 @@ app.use(
           'ws://localhost:*', // ✅ Allow WebSockets for local dev
           'https://api.stripe.com', // ✅ Allow Stripe iframe
           'https://applepay.cdn-apple.com',
-          'https://wonderweave-tours.onrender.com'
+          'https://wonderweave-tours.onrender.com',
         ],
         imgSrc: [
           "'self'",
