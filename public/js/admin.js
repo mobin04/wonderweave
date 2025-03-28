@@ -27,16 +27,16 @@ export const bookTourFunc = (bookBtn) => {
 };
 
 // 2) // BOOKING-CONFIRM
-export const confirmBookingFunc = (bookingSuccessContainer) => {
-  const tourData = JSON.parse(
-    bookingSuccessContainer.getAttribute('data-tour'),
-  );
+// export const confirmBookingFunc = (bookingSuccessContainer) => {
+//   const tourData = JSON.parse(
+//     bookingSuccessContainer.getAttribute('data-tour'),
+//   );
 
-  const id = tourData.id;
-  const selectedDate = tourData.selectedDate;
+//   const id = tourData.id;
+//   const selectedDate = tourData.selectedDate;
 
-  bookingConfirm(id, selectedDate);
-};
+//   bookingConfirm(id, selectedDate);
+// };
 
 // 3) CREATE-REVIEW
 export const createReviewFunc = (reviewSubmitForm) => {

@@ -45,10 +45,10 @@ router.get('/book-now/:id',
   viewsController.bookNow
 );
 
-router.get('/success-booking', 
-  authController.protect, 
-  viewsController.successBooking
-);
+// router.get('/success-booking', 
+//   authController.protect, 
+//   viewsController.successBooking
+// );
 
 // Review-Related Routes
 router.get('/add-review/:tourId', 

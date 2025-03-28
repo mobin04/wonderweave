@@ -137,7 +137,7 @@ if (resendButton) {
 if (bookBtn) bookTourFunc(bookBtn);
 
 // BOOKING-CONFIRM
-if (bookingSuccessContainer) confirmBookingFunc(bookingSuccessContainer);
+// if (bookingSuccessContainer) confirmBookingFunc(bookingSuccessContainer);
 
 // CREATE REVIEW
 if (reviewSubmitForm) createReviewFunc(reviewSubmitForm);

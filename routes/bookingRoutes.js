@@ -21,10 +21,10 @@ router.get(
 router
   .route('/')
   .get(authController.restrictTo('admin', 'lead-guide', 'user') ,bookingController.getAllBookings)
-  .post(
-    authController.protect,
-    bookingController.createBooking,
-  );
+  // .post(
+  //   authController.protect,
+  //   bookingController.createBooking,
+  // );
 
 router
   .route('/:id')

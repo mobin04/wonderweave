@@ -103,16 +103,16 @@ exports.bookNow = async (req, res, next) => {
   });
 };
 
-exports.successBooking = async (req, res, next) => {
-  const { tourId, tourDate, selectedDate } = req.query;
+// exports.successBooking = async (req, res, next) => {
+//   const { tourId, tourDate, selectedDate } = req.query;
 
-  res.status(200).render('bookingSuccess', {
-    title: 'Booking Successful',
-    tourId,
-    tourDate,
-    selectedDate,
-  });
-};
+//   res.status(200).render('bookingSuccess', {
+//     title: 'Booking Successful',
+//     tourId,
+//     tourDate,
+//     selectedDate,
+//   });
+// };
 
 exports.manageReview = async (req, res, next) => {
   const tour = await Tour.findById(req.params.tourId);

@@ -15,11 +15,17 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     mode: 'payment',
-    success_url: `${req.protocol}://${req.get('host')}/success-booking/?tourId=${req.tourId}&selectedDate=${req.selectedDate}`,
-
+    // success_url: `${req.protocol}://${req.get('host')}/success-booking/?tourId=${req.tourId}&selectedDate=${req.selectedDate}`,
+    success_url: `${req.protocol}://${req.get('host')}/my-tours`,
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
     customer_email: req.user.email, // req.user came from the protect route middleware
     client_reference_id: req.params.tourID, // Store the tour ID in the session for future reference
+
+    metadata: {
+      userId: req.user.id,
+      selectedDate: req.params.date, // Store the selected date
+    },
+
     line_items: [
       {
         price_data: {
@@ -108,49 +114,49 @@ exports.isBooked = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.createBooking = catchAsync(async (req, res, next) => {
-  const { tourId, selectedDate } = req.body;
-  const userId = req.user.id;
+// exports.createBooking = catchAsync(async (req, res, next) => {
+//   const { tourId, selectedDate } = req.body;
+//   const userId = req.user.id;
 
-  const tour = await Tour.findById(tourId);
+//   const tour = await Tour.findById(tourId);
 
-  if (!tour) {
-    return next(new AppError('Tour not found with that id', 404));
-  }
+//   if (!tour) {
+//     return next(new AppError('Tour not found with that id', 404));
+//   }
 
-  // Find the tour date in the tour.dates array
-  const tourDateIndex = tour.dates.findIndex(
-    (date) => date.date.toISOString() === new Date(selectedDate).toISOString(),
-  );
+//   // Find the tour date in the tour.dates array
+//   const tourDateIndex = tour.dates.findIndex(
+//     (date) => date.date.toISOString() === new Date(selectedDate).toISOString(),
+//   );
 
-  if (tourDateIndex === -1) {
-    return next(new AppError('Selected date not found in tour dates', 400));
-  }
+//   if (tourDateIndex === -1) {
+//     return next(new AppError('Selected date not found in tour dates', 400));
+//   }
 
-  // Increase the participants count
-  tour.dates[tourDateIndex].participants += 1;
+//   // Increase the participants count
+//   tour.dates[tourDateIndex].participants += 1;
 
-  // Check if the tour is sold out
-  if (tour.dates[tourDateIndex].participants >= tour.maxGroupSize) {
-    tour.dates[tourDateIndex].soldOut = true;
-  }
+//   // Check if the tour is sold out
+//   if (tour.dates[tourDateIndex].participants >= tour.maxGroupSize) {
+//     tour.dates[tourDateIndex].soldOut = true;
+//   }
 
-  await tour.save();
+//   await tour.save();
 
-  const newBooking = await Booking.create({
-    tour: tour._id,
-    user: userId,
-    price: tour.price,
-    selectedDate,
-  });
+//   const newBooking = await Booking.create({
+//     tour: tour._id,
+//     user: userId,
+//     price: tour.price,
+//     selectedDate,
+//   });
 
-  res.status(200).json({
-    status: 'success',
-    data: {
-      booking: newBooking,
-    },
-  });
-});
+//   res.status(200).json({
+//     status: 'success',
+//     data: {
+//       booking: newBooking,
+//     },
+//   });
+// });
 
 // Get bookings for a specific tour (Nested route: /tours/:id/bookings)
 exports.getBookingsByTour = async (req, res, next) => {
@@ -176,6 +182,42 @@ exports.getBookingsByUser = async (req, res, next) => {
       booking,
     },
   });
+};
+
+const createBookingCheckout = async (session) => {
+  const tour = session.client_reference_id; // Get tour ID
+  const user = session.metadata.userId; // Get user ID from metadata
+  const price = session.amount_total / 100; // Convert from cents to dollars
+  const selectedDate = session.metadata.selectedDate; // Get selected date from metadata
+
+  await Booking.create({
+    tour,
+    user,
+    price,
+    selectedDate,
+  });
+};
+
+exports.webhookCheckout = (req, res, next) => {
+  // Read the stripe signature out of our headers
+  const signature = req.headers['stripe-signature'];
+  let event;
+
+  //stripe event
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET,
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+
+  if (event.type === 'checkout.session.completed')
+    createBookingCheckout(event.data.object);
+
+  res.status(200).json({ received: true });
 };
 
 // Factory Handler
