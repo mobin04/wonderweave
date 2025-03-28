@@ -22,9 +22,8 @@ const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
 
-app.set('trust proxy', 1); 
-app.enable('trust proxy');
-
+// app.enable('trust proxy');
+app.set('trust proxy', 'loopback, linklocal, uniquelocal'); // ✅ Safer setting
 
 // Set Pug as the view engine
 app.set('view engine', 'pug');
