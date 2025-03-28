@@ -34,7 +34,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
           product_data: {
             name: `${tour.name} Tour`,
             description: tour.summary,
-            images: [`https://natours.dev/img/tours/${tour.imageCover}`],
+            images: [`${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}`],
           },
         },
         quantity: 1,
@@ -185,40 +185,47 @@ exports.getBookingsByUser = async (req, res, next) => {
 };
 
 const createBookingCheckout = async (session) => {
-  const tour = session.client_reference_id; // Get tour ID
-  const user = session.metadata.userId; // Get user ID from metadata
-  const price = session.amount_total / 100; // Convert from cents to dollars
-  const selectedDate = session.metadata.selectedDate; // Get selected date from metadata
+  try {
+    const tour = session.client_reference_id; // Get tour ID
+    const user = session.metadata.userId; // Get user ID from metadata
+    const price = session.amount_total / 100; // Convert from cents to dollars
+    const selectedDate = session.metadata.selectedDate; // Get selected date from metadata
 
-  await Booking.create({
-    tour,
-    user,
-    price,
-    selectedDate,
-  });
+    await Booking.create({
+      tour,
+      user,
+      price,
+      selectedDate,
+    });
+
+    console.log('✅ Booking created successfully!');
+  } catch (err) {
+    console.error('❌ Error creating booking:', err);
+  }
 };
 
-exports.webhookCheckout = (req, res, next) => {
-  // Read the stripe signature out of our headers
+exports.webhookCheckout = async (req, res) => {
   const signature = req.headers['stripe-signature'];
   let event;
 
-  //stripe event
   try {
     event = stripe.webhooks.constructEvent(
       req.body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET,
+      process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
+    console.error(`❌ Webhook signature verification failed: ${err.message}`);
     return res.status(400).send(`Webhook error: ${err.message}`);
   }
 
-  if (event.type === 'checkout.session.completed')
-    createBookingCheckout(event.data.object);
+  if (event.type === 'checkout.session.completed') {
+    await createBookingCheckout(event.data.object); // ✅ Await to ensure booking is created
+  }
 
   res.status(200).json({ received: true });
 };
+
 
 // Factory Handler
 exports.getBooking = factory.getOne(Booking);
