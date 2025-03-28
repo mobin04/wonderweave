@@ -68,6 +68,7 @@ app.use(
           'ws://localhost:*', // ✅ Allow WebSockets for local dev
           'https://api.stripe.com', // ✅ Allow Stripe iframe
           'https://applepay.cdn-apple.com',
+          'https://wonderweave-tours.onrender.com'
         ],
         imgSrc: [
           "'self'",
