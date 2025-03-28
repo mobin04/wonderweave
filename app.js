@@ -22,7 +22,9 @@ const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
 
+app.set('trust proxy', 1); 
 app.enable('trust proxy');
+
 
 // Set Pug as the view engine
 app.set('view engine', 'pug');
@@ -118,6 +120,7 @@ const limiter = rateLimit({
   max: 100, // Max 100 requests
   windowMs: 60 * 60 * 1000, // Within 1 hour
   message: 'Too many requests from this IP, please try again in an hour!',
+  trustProxy: true,
 });
 app.use('/api', limiter); // Apply rate limiting to API routes
 
