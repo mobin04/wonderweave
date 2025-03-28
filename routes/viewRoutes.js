@@ -5,6 +5,8 @@ const bookingController = require('../controllers/bookingController');
 
 const router = express.Router();
 
+router.use(viewsController.alerts)
+
 // Public Routes (No Authentication Required)
 router.get('/', 
   // bookingController.createBookingCheckout, // Commented out as per original code

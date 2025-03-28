@@ -16,7 +16,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     payment_method_types: ['card'],
     mode: 'payment',
     // success_url: `${req.protocol}://${req.get('host')}/success-booking/?tourId=${req.tourId}&selectedDate=${req.selectedDate}`,
-    success_url: `${req.protocol}://${req.get('host')}/my-tours`,
+    success_url: `${req.protocol}://${req.get('host')}/my-tours?alert=booking`,
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
     customer_email: req.user.email, // req.user came from the protect route middleware
     client_reference_id: req.params.tourID, // Store the tour ID in the session for future reference
@@ -233,4 +233,44 @@ exports.webhookCheckout = async (req, res) => {
 exports.getBooking = factory.getOne(Booking);
 exports.getAllBookings = factory.getAll(Booking);
 exports.updateBooking = factory.updateOne(Booking);
-exports.deleteBooking = factory.deleteOne(Booking);
+
+exports.deleteBooking = catchAsync(async (req, res, next) => {
+  // 1) Find the booking
+  const userBooking = await Booking.findById(req.params.id);
+  if (!userBooking) {
+    return next(new AppError('No booking found with that ID', 404));
+  }
+
+  // 2) Find the related tour
+  const tour = await Tour.findById(userBooking.tour);
+  if (!tour) {
+    return next(new AppError('No tour found for this booking', 404));
+  }
+
+  // 3) Find the correct tour date in the dates array
+  const tourDateIndex = tour.dates.findIndex(
+    (date) => date.date.toISOString() === new Date(userBooking.selectedDate).toISOString()
+  );
+
+  if (tourDateIndex !== -1) {
+    // Decrease participants count
+    tour.dates[tourDateIndex].participants -= 1;
+
+    // Ensure the tour is not marked as sold out if participants decrease
+    if (tour.dates[tourDateIndex].participants < tour.maxGroupSize) {
+      tour.dates[tourDateIndex].soldOut = false;
+    }
+
+    await tour.save(); // Save changes to the tour
+  }
+
+  // 4) Delete the booking
+  await Booking.findByIdAndDelete(req.params.id);
+
+  // 5) Send response
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});
+

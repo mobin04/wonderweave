@@ -217,13 +217,21 @@ exports.adminManageReview = async (req, res, next) => {
 
 exports.manageBookings = async (req, res, next) => {
   const bookings = await Booking.find()
-  .populate('user')  // Populate the 'user' field
-  .populate('tour');  // Populate the 'tour' field
+    .populate('user') // Populate the 'user' field
+    .populate('tour'); // Populate the 'tour' field
 
   res.status(200).render('manageBookingsAdmin', {
     title: 'Manage Bookings',
     bookings,
   });
+};
+
+exports.alerts = (req, res, next) => {
+  const { alert } = req.query;
+  if (alert === 'booking')
+    res.locals.alert =
+      "Your booking was successful! Please check your email for confirmation. If your booking doesn't show up here immediatly, Please come back later.";
+  next();
 };
 
 // exports.updateUserData = (req, res) => {

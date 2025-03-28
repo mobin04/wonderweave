@@ -5,6 +5,7 @@ import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
 import { signUp } from './signUp';
 import { resendVerification } from './resendMail';
+import { showAlert } from './alerts';
 import {
   addGuideFunc,
   addLocationAndDateFunc,
@@ -192,3 +193,6 @@ if(deleteBookingsBtn){
     deleteFunc(btn, 'booking')
   })
 }
+
+const alertMessage = document.querySelector('body').dataset.alert;
+if (alert) showAlert('success', alertMessage, 15)
